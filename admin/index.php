@@ -5,11 +5,34 @@ require_once dirname(__DIR__) . '/config/init.php';
 require_once __DIR__ . '/includes/admin-functions.php';
 
 $requestPath = parse_url($_SERVER['REQUEST_URI'] ?? '/admin/', PHP_URL_PATH) ?: '/admin/';
-if (!str_starts_with($requestPath, '/admin')) {
-    tamim_redirect('/admin/');
+
+// If routed through index.php, use the pre-computed admin route
+if (isset($_SERVER['TAMIM_ADMIN_ROUTE'])) {
+    $route = ltrim($_SERVER['TAMIM_ADMIN_ROUTE'], '/');
+} else {
+    // Direct access: strip /admin prefix (works in any subdirectory)
+    $adminPos = strpos($requestPath, '/admin');
+    $route = $adminPos !== false ? trim(substr($requestPath, $adminPos + strlen('/admin')), '/') : '';
 }
 
-$route = trim(substr($requestPath, strlen('/admin')), '/');
+$adminBase = rtrim(dirname($_SERVER['SCRIPT_NAME'] ?? ''), '/');
+$adminBase = $adminBase === '' ? '/admin' : $adminBase;
+
+function admin_base(): string
+{
+    static $base = null;
+    if ($base === null) {
+        $base = rtrim(dirname($_SERVER['SCRIPT_NAME'] ?? ''), '/');
+        $base = $base === '' ? '/admin' : $base;
+    }
+    return $base;
+}
+
+function admin_redirect(string $path): void
+{
+    header('Location: ' . admin_base() . '/' . ltrim($path, '/'));
+    exit;
+}
 if ($route === 'assets/admin.css') {
     $asset = __DIR__ . '/assets/admin.css';
     if (is_file($asset)) {
@@ -58,7 +81,7 @@ function admin_login_success(): void
 
 if ($resourceName === 'login') {
     if (tamim_current_admin() !== null) {
-        tamim_redirect('/admin/');
+        tamim_redirect(admin_url());
     }
 
     $loginMessage = '';
@@ -95,7 +118,7 @@ if ($resourceName === 'login') {
                             $rehash->execute([password_hash($password, PASSWORD_DEFAULT), (int) $account['id']]);
                         }
                         admin_login_success();
-                        tamim_redirect('/admin/');
+                        admin_redirect();
                     }
 
                     admin_login_failure();
@@ -114,7 +137,7 @@ if ($resourceName === 'login') {
 
 if ($resourceName === 'logout') {
     if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !tamim_verify_csrf() || tamim_current_admin() === null) {
-        tamim_redirect('/admin/login');
+        tamim_redirect(admin_url('login'));
     }
 
     $_SESSION = [];
@@ -123,7 +146,7 @@ if ($resourceName === 'logout') {
         setcookie(session_name(), '', time() - 42000, $params['path'], $params['domain'], $params['secure'], $params['httponly']);
     }
     session_destroy();
-    tamim_redirect('/admin/login');
+    tamim_redirect(admin_url('login'));
 }
 
 tamim_require_admin();
@@ -198,7 +221,7 @@ if ($resourceName === 'settings') {
             tamim_flash('error', 'Unknown setting action.');
         }
 
-        tamim_redirect('/admin/settings');
+        tamim_redirect(admin_url('settings'));
     }
 
     $settings = tamim_pdo()->query('SELECT setting_key, setting_value, updated_at FROM settings ORDER BY setting_key')->fetchAll();
@@ -218,7 +241,7 @@ if ($resource === null) {
     <section class="admin-empty">
         <p class="admin-eyebrow">404</p>
         <h1>That admin page does not exist.</h1>
-        <a class="admin-button admin-button-primary" href="/admin/">Return to dashboard</a>
+        <a class="admin-button admin-button-primary" href="<?php echo tamim_e(admin_url()); ?>">Return to dashboard</a>
     </section>
     <?php
     require __DIR__ . '/includes/footer.php';

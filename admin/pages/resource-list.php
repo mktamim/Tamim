@@ -40,7 +40,7 @@
                             <td>
                                 <div class="admin-row-actions">
                                     <a class="admin-icon-button" href="<?php echo tamim_e(admin_url($resourceName . '/edit?id=' . (int) $record['id'])); ?>">Edit</a>
-                                    <form method="post" action="<?php echo tamim_e(admin_url($resourceName . '/delete')); ?>">
+                                    <form method="post" action="">
                                         <?php echo tamim_csrf_field(); ?>
                                         <input type="hidden" name="id" value="<?php echo (int) $record['id']; ?>">
                                         <button class="admin-icon-button admin-icon-button-danger" type="submit" onclick="return confirm('Delete this <?php echo tamim_e(mb_strtolower($resource['singular'])); ?>?')">Delete</button>

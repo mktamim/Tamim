@@ -22,7 +22,7 @@ declare(strict_types=1);
             <div class="admin-notice admin-notice-<?php echo tamim_e($loginMessageType); ?>" role="alert"><?php echo tamim_e($loginMessage); ?></div>
         <?php endif; ?>
 
-        <form class="admin-form admin-login-form" method="post" action="/admin/login">
+        <form class="admin-form admin-login-form" method="post" action="">
             <?php echo tamim_csrf_field(); ?>
             <label>
                 <span>Email address</span>

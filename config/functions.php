@@ -65,7 +65,9 @@ function tamim_current_admin(): ?array
 function tamim_require_admin(): void
 {
     if (tamim_current_admin() === null) {
-        tamim_redirect('/admin/login');
+        $scriptDir = rtrim(dirname($_SERVER['SCRIPT_NAME'] ?? ''), '/');
+        $adminBase = $scriptDir ?: '/admin';
+        tamim_redirect($adminBase . '/login');
     }
 }
 

@@ -10,7 +10,7 @@
 </section>
 
 <section class="admin-panel">
-    <form class="admin-form admin-form-grid" method="post" enctype="<?php echo $hasImageFields ? 'multipart/form-data' : 'application/x-www-form-urlencoded'; ?>" action="<?php echo tamim_e(admin_url($resourceName . '/' . ($editing ? 'edit' : 'new') . ($editing ? '?id=' . $requestedId : ''))); ?>">
+    <form class="admin-form admin-form-grid" method="post" enctype="<?php echo $hasImageFields ? 'multipart/form-data' : 'application/x-www-form-urlencoded'; ?>" action="">
         <?php echo tamim_csrf_field(); ?>
         <?php if (isset($formErrors['form'])): ?>
             <div class="admin-notice admin-notice-error admin-form-full" role="alert"><?php echo tamim_e($formErrors['form']); ?></div>

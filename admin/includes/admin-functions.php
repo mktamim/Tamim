@@ -3,9 +3,11 @@ declare(strict_types=1);
 
 function admin_url(string $path = ''): string
 {
-    $path = '/' . trim($path, '/');
+    $scriptDir = rtrim(dirname($_SERVER['SCRIPT_NAME'] ?? ''), '/');
+    $adminBase = $scriptDir ?: '/admin';
+    $path = trim($path, '/');
 
-    return $path === '/admin' ? '/admin/' : '/admin' . $path;
+    return $path === '' ? $adminBase . '/' : $adminBase . '/' . $path;
 }
 
 function admin_back_url(string $fallback): string

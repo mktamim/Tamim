@@ -44,10 +44,12 @@ function tamim_pdo(?string $database = null): PDO
     $username = tamim_env('DB_USER', 'root');
     $password = tamim_env('DB_PASS', '');
     $charset = 'utf8mb4';
+    $defaultDatabase = tamim_env('DB_NAME', 'tamim_portfolio');
 
     $dsn = "mysql:host={$host};port={$port};charset={$charset}";
-    if ($database !== null && $database !== '') {
-        $dsn .= ";dbname={$database}";
+    $targetDatabase = ($database !== null && $database !== '') ? $database : $defaultDatabase;
+    if ($targetDatabase !== '') {
+        $dsn .= ";dbname={$targetDatabase}";
     }
 
     $options = [

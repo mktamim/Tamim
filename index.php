@@ -5,9 +5,28 @@ require_once __DIR__ . '/config/init.php';
 require_once __DIR__ . '/includes/template-helpers.php';
 
 $requestPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
-$route = trim($requestPath, '/');
+$scriptName = dirname($_SERVER['SCRIPT_NAME'] ?? ''); // e.g. /Tamim or empty
+$scriptName = rtrim($scriptName, '/');
+
+// Strip the subdirectory prefix so routes work in any directory
+$relativePath = $requestPath;
+if ($scriptName !== '' && str_starts_with($relativePath, $scriptName)) {
+    $relativePath = substr($relativePath, strlen($scriptName)) ?: '/';
+}
+
+$route = trim($relativePath, '/');
 if ($route === '') {
     $route = 'home';
+}
+
+// Route admin requests to the admin controller
+if (str_starts_with($route, 'admin')) {
+    $adminRoute = substr($route, strlen('admin'));
+    $adminRoute = trim($adminRoute, '/');
+    $adminRoute = $adminRoute === '' ? '' : '/' . $adminRoute;
+    $_SERVER['TAMIM_ADMIN_ROUTE'] = $adminRoute;
+    require __DIR__ . '/admin/index.php';
+    exit;
 }
 
 $pageTitle = '';
