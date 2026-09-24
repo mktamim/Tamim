@@ -1,0 +1,9 @@
+.env
+.env.local
+vendor/
+node_modules/
+assets/uploads/*
+!assets/uploads/.gitkeep
+database/installed
+*.log
+.phpunit.cache/
