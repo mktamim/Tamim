@@ -16,10 +16,11 @@ $ctaUrl = tamim_url(tamim_setting('hero_cta_url', '/projects'));
             <p class="eyebrow"><span class="status-dot"></span>Available for selected projects</p>
             <h1><?php echo tamim_e($heroTitle); ?></h1>
             <p class="hero-lead"><?php echo tamim_e($heroSubtitle); ?></p>
-            <div class="hero-actions"><a class="button button-primary" href="<?php echo tamim_e($ctaUrl); ?>"><?php echo tamim_e($ctaLabel); ?></a><a class="button button-secondary" href="/contact">Start a conversation</a></div>
+            <div class="hero-actions"><a class="button button-primary" href="<?php echo tamim_e($ctaUrl); ?>">View my work</a><a class="button button-secondary" href="/contact">Start a conversation</a></div>
             <div class="hero-meta"><span><?php echo tamim_e($heroLocation); ?></span><span>Responsive by default</span><span>Performance minded</span></div>
         </div>
         <div class="hero-visual" aria-hidden="true">
+            <img src="/assets/images/hero-bg.svg" alt="" class="hero-bg-img">
             <div class="visual-window">
                 <div class="window-bar"><span></span><span></span><span></span><strong>tamim.dev</strong></div>
                 <div class="window-content">
