@@ -98,7 +98,10 @@
     <button class="btn btn-primary back-to-top" id="backToTop" aria-label="Back to top">
         <i class="fas fa-arrow-up"></i>
     </button>
-    
+
+    <!-- Live Chat Widget -->
+    <?php include __DIR__ . '/live-chat-widget.php'; ?>
+
     <!-- Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Custom JS -->

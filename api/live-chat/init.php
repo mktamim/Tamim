@@ -1,0 +1,43 @@
+<?php
+require_once __DIR__ . '/../../includes/bootstrap.php';
+
+header('Content-Type: application/json');
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo json_encode(['success' => false, 'message' => 'Method not allowed']);
+    exit;
+}
+
+// Get or create session
+$sessionId = $_COOKIE['live_chat_session'] ?? null;
+$visitorName = trim($_POST['name'] ?? 'Visitor');
+$visitorEmail = trim($_POST['email'] ?? '');
+
+if (!$sessionId) {
+    $sessionId = bin2hex(random_bytes(32));
+    setcookie('live_chat_session', $sessionId, time() + 86400 * 30, '/', '', false, true);
+}
+
+// Check existing chat
+$chat = db_one('SELECT * FROM live_chats WHERE session_id = ? AND status != "closed" ORDER BY created_at DESC LIMIT 1', [$sessionId]);
+
+if (!$chat) {
+    // Create new chat
+    $chatId = db_execute(
+        'INSERT INTO live_chats (session_id, visitor_name, visitor_email, visitor_ip, user_agent, status) VALUES (?, ?, ?, ?, ?, "waiting")',
+        [$sessionId, $visitorName, $visitorEmail, get_client_ip(), $_SERVER['HTTP_USER_AGENT'] ?? '']
+    );
+    $chat = db_one('SELECT * FROM live_chats WHERE id = ?', [$chatId]);
+} else {
+    // Update visitor info
+    db_execute('UPDATE live_chats SET visitor_name = ?, visitor_email = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?', [$visitorName, $visitorEmail, $chat['id']]);
+    $chatId = $chat['id'];
+}
+
+echo json_encode([
+    'success' => true,
+    'chat_id' => $chatId,
+    'session_id' => $sessionId,
+    'status' => $chat['status'] ?? 'waiting'
+]);
