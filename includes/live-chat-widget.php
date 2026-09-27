@@ -78,7 +78,7 @@ $pageUrl = current_url();
 #liveChatWidget {
     position: fixed;
     bottom: 24px;
-    right: 24px;
+    left: 24px;
     z-index: 9999;
     font-family: inherit;
 }
@@ -131,7 +131,7 @@ $pageUrl = current_url();
 .live-chat-window {
     position: absolute;
     bottom: 80px;
-    right: 0;
+    left: 0;
     width: 360px;
     max-height: 500px;
     background: white;
@@ -248,14 +248,14 @@ $pageUrl = current_url();
 @media (max-width: 480px) {
     .live-chat-window {
         width: calc(100vw - 32px);
-        right: -16px;
+        left: -16px;
         bottom: 80px;
         max-height: 70vh;
     }
     
     #liveChatWidget {
         bottom: 16px;
-        right: 16px;
+        left: 16px;
     }
 }
 </style>
@@ -310,7 +310,7 @@ $pageUrl = current_url();
     // Load existing chat or show pre-form
     async function loadChat() {
         try {
-            const response = await fetch('/Tamim/api/live-chat/messages.php');
+            const response = await fetch('/Tamim/api/live-chat/messages');
             const data = await response.json();
             
             if (data.success && data.chat_id) {
@@ -409,7 +409,7 @@ $pageUrl = current_url();
         
         try {
             // First initialize chat
-            const initResponse = await fetch('/Tamim/api/live-chat/init.php', {
+            const initResponse = await fetch('/Tamim/api/live-chat/init', {
                 method: 'POST',
                 body: new FormData(form)
             });
@@ -427,7 +427,7 @@ $pageUrl = current_url();
             formData.append('sender_type', 'visitor');
             formData.append('csrf_token', document.querySelector('input[name="csrf_token"]').value);
             
-            const sendResponse = await fetch('/Tamim/api/live-chat/send.php', {
+            const sendResponse = await fetch('/Tamim/api/live-chat/send', {
                 method: 'POST',
                 body: formData
             });
@@ -491,7 +491,7 @@ $pageUrl = current_url();
         if (!chatId) return;
         
         try {
-            const response = await fetch(`/Tamim/api/live-chat/messages.php?since=${lastMessageId}`);
+            const response = await fetch(`/Tamim/api/live-chat/messages?since=${lastMessageId}`);
             const data = await response.json();
             
             if (data.success && data.messages && data.messages.length > 0) {
@@ -520,7 +520,7 @@ $pageUrl = current_url();
             formData.append('message_ids', JSON.stringify(messageIds));
             formData.append('csrf_token', document.querySelector('input[name="csrf_token"]').value);
             
-            await fetch('/Tamim/api/live-chat/read.php', {
+            await fetch('/Tamim/api/live-chat/read', {
                 method: 'POST',
                 body: formData
             });

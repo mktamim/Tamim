@@ -20,7 +20,7 @@ if ($status !== 'all') {
 
 $total = db_one('SELECT COUNT(*) as cnt FROM live_chats lc ' . $where, $params)['cnt'];
 $chats = db_all(
-    'SELECT lc.*, a.name as admin_name,
+    'SELECT lc.*, a.full_name as admin_name,
         (SELECT COUNT(*) FROM live_chat_messages WHERE chat_id = lc.id AND sender_type = "visitor" AND is_read = FALSE) as unread_visitor,
         (SELECT COUNT(*) FROM live_chat_messages WHERE chat_id = lc.id AND sender_type = "admin" AND is_read = FALSE) as unread_admin,
         (SELECT message FROM live_chat_messages WHERE chat_id = lc.id ORDER BY created_at DESC LIMIT 1) as last_message,

@@ -118,6 +118,12 @@ function auth_check(): bool
     return isset($_SESSION['admin_id']) && !empty($_SESSION['admin_id']);
 }
 
+// Alias for backward compatibility
+function is_logged_in(): bool
+{
+    return auth_check();
+}
+
 // Get current admin user
 function auth_user(): ?array
 {

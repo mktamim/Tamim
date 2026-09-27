@@ -24,7 +24,7 @@ if ($chat['status'] === 'waiting' && !$chat['assigned_admin_id']) {
 }
 
 $messages = db_all(
-    'SELECT m.*, a.name as admin_name FROM live_chat_messages m LEFT JOIN admins a ON m.sender_id = a.id WHERE m.chat_id = ? ORDER BY m.created_at ASC',
+    'SELECT m.*, a.full_name as admin_name FROM live_chat_messages m LEFT JOIN admins a ON m.sender_id = a.id WHERE m.chat_id = ? ORDER BY m.created_at ASC',
     [$chat['id']]
 );
 

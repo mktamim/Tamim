@@ -11,6 +11,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $sessionId = $_COOKIE['live_chat_session'] ?? null;
 $messageIds = $_POST['message_ids'] ?? [];
+if (is_string($messageIds)) {
+    $messageIds = json_decode($messageIds, true) ?? [];
+}
+if (!is_array($messageIds)) {
+    $messageIds = [];
+}
 
 if (!$sessionId || !$messageIds) {
     http_response_code(400);
