@@ -41,7 +41,7 @@ $stats = [
     'closed' => db_one('SELECT COUNT(*) as cnt FROM live_chats WHERE status = "closed"')['cnt'],
 ];
 
-require __DIR__ . '/../includes/admin_header.php';
+require __DIR__ . '/../../includes/admin_header.php';
 ?>
 
 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -155,4 +155,4 @@ require __DIR__ . '/../includes/admin_header.php';
     </div>
 <?php endif; ?>
 
-<?php require __DIR__ . '/../includes/admin_footer.php'; ?>
+<?php require __DIR__ . '/../../includes/admin_footer.php'; ?>

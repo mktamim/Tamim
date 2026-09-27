@@ -124,6 +124,14 @@ function is_logged_in(): bool
     return auth_check();
 }
 
+// Require admin authentication (redirect if not logged in)
+function require_admin(): void
+{
+    if (!auth_check()) {
+        redirect('/Tamim/admin/login.php');
+    }
+}
+
 // Get current admin user
 function auth_user(): ?array
 {
