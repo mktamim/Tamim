@@ -1,6 +1,10 @@
 <?php
 require_once __DIR__ . '/../../includes/bootstrap.php';
 
+// Prevent caching - critical for API endpoints
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Pragma: no-cache');
+header('Expires: Thu, 19 Nov 1981 08:52:00 GMT');
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
