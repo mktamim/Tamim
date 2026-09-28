@@ -43,7 +43,7 @@ function db(): PDO
     static $pdo = null;
     if ($pdo === null) {
         $dbConfig = config('database');
-        $dsn = "mysql:host={$dbConfig['host']};dbname={$dbConfig['dbname']};charset={$dbConfig['charset']}";
+        $dsn = "mysql:host={$dbConfig['host']};port={$dbConfig['port']};dbname={$dbConfig['dbname']};charset={$dbConfig['charset']}";
         $pdo = new PDO($dsn, $dbConfig['username'], $dbConfig['password'], $dbConfig['options']);
     }
     return $pdo;

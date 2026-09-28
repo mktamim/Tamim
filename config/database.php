@@ -4,11 +4,14 @@
  * Portfolio Website - Config
  */
 
+$env = parse_ini_file(__DIR__ . '/../.env', true) ?: [];
+
 return [
-    'host' => 'localhost',
-    'dbname' => 'traveleyeba_db',
-    'username' => 'traveleyeba_traveleyeba',
-    'password' => '',
+    'host' => $env['DB_HOST'] ?? '127.0.0.1',
+    'port' => $env['DB_PORT'] ?? '3306',
+    'dbname' => $env['DB_NAME'] ?? 'traveleyeba_db',
+    'username' => $env['DB_USER'] ?? 'traveleyeba_traveleyeba',
+    'password' => $env['DB_PASS'] ?? '',
     'charset' => 'utf8mb4',
     'options' => [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
