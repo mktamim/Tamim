@@ -15,7 +15,7 @@ $params = [];
 
 if ($status !== 'all') {
     if ($status === 'expired') {
-        $where = 'WHERE lc.status IN ("waiting","active") AND TIMESTAMPDIFF(MINUTE, lc.last_activity, NOW()) >= 5';
+        $where = 'WHERE lc.status IN ("waiting","active") AND TIMESTAMPDIFF(MINUTE, lc.last_activity_at, NOW()) >= 5';
     } else {
         $where = 'WHERE lc.status = ?';
         $params[] = $status;
@@ -29,7 +29,7 @@ $chats = db_all(
         (SELECT COUNT(*) FROM live_chat_messages WHERE chat_id = lc.id AND sender_type = "admin" AND is_read = FALSE) as unread_admin,
         (SELECT message FROM live_chat_messages WHERE chat_id = lc.id ORDER BY created_at DESC LIMIT 1) as last_message,
         (SELECT created_at FROM live_chat_messages WHERE chat_id = lc.id ORDER BY created_at DESC LIMIT 1) as last_message_time,
-        TIMESTAMPDIFF(MINUTE, lc.last_activity, NOW()) as inactive_minutes
+        TIMESTAMPDIFF(MINUTE, lc.last_activity_at, NOW()) as inactive_minutes
     FROM live_chats lc
     LEFT JOIN admins a ON lc.assigned_admin_id = a.id
     ' . $where . '
@@ -44,7 +44,7 @@ $stats = [
     'waiting' => db_one('SELECT COUNT(*) as cnt FROM live_chats WHERE status = "waiting"')['cnt'],
     'active' => db_one('SELECT COUNT(*) as cnt FROM live_chats WHERE status = "active"')['cnt'],
     'closed' => db_one('SELECT COUNT(*) as cnt FROM live_chats WHERE status = "closed"')['cnt'],
-    'expired' => db_one('SELECT COUNT(*) as cnt FROM live_chats WHERE status IN ("waiting","active") AND TIMESTAMPDIFF(MINUTE, last_activity, NOW()) >= 5')['cnt'],
+    'expired' => db_one('SELECT COUNT(*) as cnt FROM live_chats WHERE status IN ("waiting","active") AND TIMESTAMPDIFF(MINUTE, last_activity_at, NOW()) >= 5')['cnt'],
 ];
 
 require __DIR__ . '/../../includes/admin_header.php';

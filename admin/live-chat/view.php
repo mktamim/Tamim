@@ -13,14 +13,14 @@ if (!$chat) {
 }
 
 // Check if chat is expired (5 minutes inactivity)
-$isExpired = $chat['status'] !== 'closed' && (time() - strtotime($chat['last_activity'])) >= 300;
+$isExpired = $chat['status'] !== 'closed' && (time() - strtotime($chat['last_activity_at'])) >= 300;
 
 // Mark visitor messages as read
 db_execute('UPDATE live_chat_messages SET is_read = TRUE WHERE chat_id = ? AND sender_type = "visitor"', [$chat['id']]);
 
 // Assign to current admin if unassigned
 if ($chat['status'] === 'waiting' && !$chat['assigned_admin_id']) {
-    db_execute('UPDATE live_chats SET assigned_admin_id = ?, status = "active", updated_at = CURRENT_TIMESTAMP, last_activity = CURRENT_TIMESTAMP WHERE id = ?', [$_SESSION['admin_id'], $chat['id']]);
+    db_execute('UPDATE live_chats SET assigned_admin_id = ?, status = "active", updated_at = CURRENT_TIMESTAMP, last_activity_at = CURRENT_TIMESTAMP WHERE id = ?', [$_SESSION['admin_id'], $chat['id']]);
     $chat['assigned_admin_id'] = $_SESSION['admin_id'];
     $chat['status'] = 'active';
     $chat['admin_name'] = $_SESSION['admin_name'] ?? 'Admin';
@@ -136,7 +136,7 @@ require __DIR__ . '/../../includes/admin_header.php';
                     </td></tr>
                     <tr><th>Assigned To</th><td><?= $chat['admin_name'] ? e($chat['admin_name']) : 'Unassigned' ?></td></tr>
                     <tr><th>Started</th><td><?= format_date($chat['created_at'], 'M d, Y H:i') ?></td></tr>
-                    <tr><th>Last Active</th><td><?= format_date($chat['last_activity'], 'M d, Y H:i') ?></td></tr>
+                    <tr><th>Last Active</th><td><?= format_date($chat['last_activity_at'], 'M d, Y H:i') ?></td></tr>
                 </table>
             </div>
         </div>

@@ -22,6 +22,6 @@ if ($chat['status'] === 'closed') {
     redirect('/admin/live-chat/view.php?id=' . $id, 'Chat is already closed', 'warning');
 }
 
-db_execute('UPDATE live_chats SET assigned_admin_id = ?, status = "active", updated_at = CURRENT_TIMESTAMP, last_activity = CURRENT_TIMESTAMP WHERE id = ?', [$adminId, $id]);
+db_execute('UPDATE live_chats SET assigned_admin_id = ?, status = "active", updated_at = CURRENT_TIMESTAMP, last_activity_at = CURRENT_TIMESTAMP WHERE id = ?', [$adminId, $id]);
 
 redirect('/admin/live-chat/view.php?id=' . $id, 'Chat assigned to you', 'success');
