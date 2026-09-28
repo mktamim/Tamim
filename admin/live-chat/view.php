@@ -193,6 +193,7 @@ document.getElementById('adminChatForm')?.addEventListener('submit', async funct
         
         const response = await fetch('/api/live-chat/send', {
             method: 'POST',
+            credentials: 'include',
             body: formData
         });
         const data = await response.json();

@@ -9,17 +9,27 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
+$chatId = (int)($_POST['chat_id'] ?? 0);
 $sessionId = $_COOKIE['live_chat_session'] ?? null;
 $message = trim($_POST['message'] ?? '');
 $senderType = $_POST['sender_type'] ?? 'visitor'; // 'visitor' or 'admin'
 
-if (!$sessionId || !$message) {
-    http_response_code(400);
-    echo json_encode(['success' => false, 'message' => 'Missing session or message']);
-    exit;
+// For admin, use chat_id directly; for visitor, use session_id
+if ($senderType === 'admin') {
+    if (!is_logged_in() || !$chatId) {
+        http_response_code(401);
+        echo json_encode(['success' => false, 'message' => 'Unauthorized or missing chat_id']);
+        exit;
+    }
+    $chat = db_one('SELECT * FROM live_chats WHERE id = ? AND status != "closed"', [$chatId]);
+} else {
+    if (!$sessionId || !$message) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'Missing session or message']);
+        exit;
+    }
+    $chat = db_one('SELECT * FROM live_chats WHERE session_id = ? AND status != "closed" ORDER BY created_at DESC LIMIT 1', [$sessionId]);
 }
-
-$chat = db_one('SELECT * FROM live_chats WHERE session_id = ? AND status != "closed" ORDER BY created_at DESC LIMIT 1', [$sessionId]);
 
 if (!$chat) {
     http_response_code(404);
@@ -29,11 +39,6 @@ if (!$chat) {
 
 $senderId = null;
 if ($senderType === 'admin') {
-    if (!is_logged_in()) {
-        http_response_code(401);
-        echo json_encode(['success' => false, 'message' => 'Unauthorized']);
-        exit;
-    }
     $senderId = $_SESSION['admin_id'];
     db_execute('UPDATE live_chats SET status = "active", assigned_admin_id = ?, last_activity_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP WHERE id = ?', [$senderId, $chat['id']]);
 } else {
