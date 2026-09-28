@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $errors[] = 'Account temporarily locked. Please try again later.';
             } else {
                 auth_login($admin['id'], $remember);
-                redirect('/admin/dashboard.php', 'Welcome back, ' . e($admin['full_name'] ?? $admin['username']) . '!');
+                redirect('/admin/dashboard', 'Welcome back, ' . e($admin['full_name'] ?? $admin['username']) . '!');
             }
         }
     }
