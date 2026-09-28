@@ -7,15 +7,15 @@
 require_once __DIR__ . '/../includes/bootstrap.php';
 
 if (!auth_check()) {
-    redirect('/Tamim/admin/login.php');
+    redirect('/admin/login.php');
 }
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    redirect('/Tamim/admin/profile.php');
+    redirect('/admin/profile.php');
 }
 
 if (!csrf_verify($_POST[config('security.csrf_token_name')] ?? '')) {
-    redirect('/Tamim/admin/profile.php', 'Invalid CSRF token.', 'danger');
+    redirect('/admin/profile.php', 'Invalid CSRF token.', 'danger');
 }
 
 $currentPassword = $_POST['current_password'] ?? '';
@@ -43,10 +43,10 @@ if ($newPassword !== $confirmPassword) {
 
 if (!empty($errors)) {
     $_SESSION['password_errors'] = $errors;
-    redirect('/Tamim/admin/profile.php');
+    redirect('/admin/profile.php');
 }
 
 $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
 db_execute('UPDATE admins SET password = ?, updated_at = NOW() WHERE id = ?', [$hashedPassword, $admin['id']]);
 
-redirect('/Tamim/admin/profile.php', 'Password changed successfully!');
+redirect('/admin/profile.php', 'Password changed successfully!');

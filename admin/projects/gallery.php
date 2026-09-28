@@ -7,14 +7,14 @@
 require_once __DIR__ . '/../../includes/bootstrap.php';
 
 if (!auth_check()) {
-    redirect('/Tamim/admin/login.php');
+    redirect('/admin/login.php');
 }
 
 $id = (int)($_GET['id'] ?? 0);
 $project = db_one('SELECT * FROM projects WHERE id = ?', [$id]);
 
 if (!$project) {
-    redirect('/Tamim/admin/projects/', 'Project not found.', 'danger');
+    redirect('/admin/projects/', 'Project not found.', 'danger');
 }
 
 $pageTitle = 'Gallery: ' . $project['title'];
@@ -25,7 +25,7 @@ $gallery = json_decode($project['gallery_images'] ?? '[]', true) ?? [];
 // Handle image upload
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['upload_gallery'])) {
     if (!csrf_verify($_POST[config('security.csrf_token_name')] ?? '')) {
-        redirect('/Tamim/admin/projects/gallery.php?id=' . $id, 'Invalid CSRF token.', 'danger');
+        redirect('/admin/projects/gallery.php?id=' . $id, 'Invalid CSRF token.', 'danger');
     }
     
     if (!empty($_FILES['gallery_images']['name'][0])) {
@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['upload_gallery'])) {
         
         $galleryJson = json_encode(array_values($newGallery));
         db_execute('UPDATE projects SET gallery_images = ?, updated_at = NOW() WHERE id = ?', [$galleryJson, $id]);
-        redirect('/Tamim/admin/projects/gallery.php?id=' . $id, 'Gallery images uploaded successfully!');
+        redirect('/admin/projects/gallery.php?id=' . $id, 'Gallery images uploaded successfully!');
     }
 }
 
@@ -60,14 +60,14 @@ if (isset($_GET['remove'])) {
     db_execute('UPDATE projects SET gallery_images = ?, updated_at = NOW() WHERE id = ?', [$galleryJson, $id]);
     
     delete_file('projects/gallery/' . $removeFile);
-    redirect('/Tamim/admin/projects/gallery.php?id=' . $id, 'Image removed successfully!');
+    redirect('/admin/projects/gallery.php?id=' . $id, 'Image removed successfully!');
 }
 
 require __DIR__ . '/../../includes/admin_header.php';
 ?>
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="h3 mb-0"><?= e($pageTitle) ?></h1>
-    <a href="/Tamim/admin/projects/edit.php?id=<?= $id ?>" class="btn btn-secondary">
+    <a href="/admin/projects/edit.php?id=<?= $id ?>" class="btn btn-secondary">
         <i class="fas fa-arrow-left me-2"></i>Back to Edit
     </a>
 </div>
@@ -106,7 +106,7 @@ require __DIR__ . '/../../includes/admin_header.php';
                                     <img src="<?= e(setting('site_url', '/Tamim') . '/assets/uploads/projects/gallery/' . $img) ?>" alt="" class="img-fluid rounded object-fit-cover h-100 w-100">
                                 </div>
                                 <div class="position-absolute top-0 end-0 m-2">
-                                    <a href="/Tamim/admin/projects/gallery.php?id=<?= $id ?>&remove=<?= urlencode($img) ?>" 
+                                    <a href="/admin/projects/gallery.php?id=<?= $id ?>&remove=<?= urlencode($img) ?>" 
                                        class="btn btn-sm btn-danger rounded-circle" 
                                        onclick="return confirm('Delete this image?')"
                                        title="Delete">

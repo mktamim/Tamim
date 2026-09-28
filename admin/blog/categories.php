@@ -7,7 +7,7 @@
 require_once __DIR__ . '/../../includes/bootstrap.php';
 
 if (!auth_check()) {
-    redirect('/Tamim/admin/login.php');
+    redirect('/admin/login.php');
 }
 
 $pageTitle = 'Blog Categories';
@@ -17,7 +17,7 @@ $categories = db_all('SELECT * FROM blog_categories ORDER BY sort_order, name');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_category'])) {
     if (!csrf_verify($_POST[config('security.csrf_token_name')] ?? '')) {
-        redirect('/Tamim/admin/blog/categories/', 'Invalid CSRF token.', 'danger');
+        redirect('/admin/blog/categories/', 'Invalid CSRF token.', 'danger');
     }
     
     $name = trim($_POST['name'] ?? '');
@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_category'])) {
     $edit_id = (int)($_POST['edit_id'] ?? 0);
     
     if (empty($name)) {
-        redirect('/Tamim/admin/blog/categories/', 'Category name is required.', 'danger');
+        redirect('/admin/blog/categories/', 'Category name is required.', 'danger');
     }
     
     if (empty($slug)) {
@@ -42,17 +42,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_category'])) {
     
     if ($edit_id) {
         db_execute('UPDATE blog_categories SET name=?, slug=?, description=?, is_active=?, sort_order=?, updated_at=NOW() WHERE id=?', [$name, $slug, $description, $is_active, $sort_order, $edit_id]);
-        redirect('/Tamim/admin/blog/categories/', 'Category updated successfully!');
+        redirect('/admin/blog/categories/', 'Category updated successfully!');
     } else {
         db_execute('INSERT INTO blog_categories (name, slug, description, is_active, sort_order) VALUES (?, ?, ?, ?, ?)', [$name, $slug, $description, $is_active, $sort_order]);
-        redirect('/Tamim/admin/blog/categories/', 'Category created successfully!');
+        redirect('/admin/blog/categories/', 'Category created successfully!');
     }
 }
 
 if (isset($_GET['delete'])) {
     $id = (int)$_GET['delete'];
     db_execute('DELETE FROM blog_categories WHERE id = ?', [$id]);
-    redirect('/Tamim/admin/blog/categories/', 'Category deleted successfully!');
+    redirect('/admin/blog/categories/', 'Category deleted successfully!');
 }
 
 require __DIR__ . '/../../includes/admin_header.php';
@@ -140,7 +140,7 @@ require __DIR__ . '/../../includes/admin_header.php';
                                                     onclick="editCategory(<?= htmlspecialchars(json_encode($cat)) ?>)">
                                                 <i class="fas fa-edit"></i>
                                             </button>
-                                            <a href="/Tamim/admin/blog/categories/?delete=<?= $cat['id'] ?>" 
+                                            <a href="/admin/blog/categories/?delete=<?= $cat['id'] ?>" 
                                                class="btn btn-sm btn-outline-danger" 
                                                onclick="return confirm('Delete this category?')">
                                                 <i class="fas fa-trash"></i>

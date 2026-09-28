@@ -7,7 +7,7 @@
 require_once __DIR__ . '/../../includes/bootstrap.php';
 
 if (!auth_check()) {
-    redirect('/Tamim/admin/login.php');
+    redirect('/admin/login.php');
 }
 
 $pageTitle = 'Blog';
@@ -29,13 +29,13 @@ if ($status !== 'all') {
 $total = db_one('SELECT COUNT(*) as c FROM blog_posts bp ' . $where, $params)['c'] ?? 0;
 $posts = db_all('SELECT bp.*, bc.name as category_name, a.full_name as author_name FROM blog_posts bp LEFT JOIN blog_categories bc ON bp.category_id = bc.id LEFT JOIN admins a ON bp.author_id = a.id ' . $where . ' ORDER BY bp.created_at DESC LIMIT ? OFFSET ?', array_merge($params, [$perPage, $offset]));
 
-$pagination = paginate($total, $perPage, $page, '/Tamim/admin/blog/?status=' . $status);
+$pagination = paginate($total, $perPage, $page, '/admin/blog/?status=' . $status);
 
 require __DIR__ . '/../../includes/admin_header.php';
 ?>
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="h3 mb-0"><?= e($pageTitle) ?></h1>
-    <a href="/Tamim/admin/blog/create.php" class="btn btn-primary">
+    <a href="/admin/blog/create.php" class="btn btn-primary">
         <i class="fas fa-plus me-2"></i>New Post
     </a>
 </div>
@@ -44,10 +44,10 @@ require __DIR__ . '/../../includes/admin_header.php';
 <div class="card mb-4">
     <div class="card-body">
         <div class="btn-group" role="group">
-            <a href="/Tamim/admin/blog/?status=all" class="btn btn-outline-<?= $status === 'all' ? 'primary' : 'secondary' ?>">All</a>
-            <a href="/Tamim/admin/blog/?status=published" class="btn btn-outline-<?= $status === 'published' ? 'success' : 'secondary' ?>">Published</a>
-            <a href="/Tamim/admin/blog/?status=draft" class="btn btn-outline-<?= $status === 'draft' ? 'warning' : 'secondary' ?>">Drafts</a>
-            <a href="/Tamim/admin/blog/?status=archived" class="btn btn-outline-<?= $status === 'archived' ? 'secondary' : 'secondary' ?>">Archived</a>
+            <a href="/admin/blog/?status=all" class="btn btn-outline-<?= $status === 'all' ? 'primary' : 'secondary' ?>">All</a>
+            <a href="/admin/blog/?status=published" class="btn btn-outline-<?= $status === 'published' ? 'success' : 'secondary' ?>">Published</a>
+            <a href="/admin/blog/?status=draft" class="btn btn-outline-<?= $status === 'draft' ? 'warning' : 'secondary' ?>">Drafts</a>
+            <a href="/admin/blog/?status=archived" class="btn btn-outline-<?= $status === 'archived' ? 'secondary' : 'secondary' ?>">Archived</a>
         </div>
     </div>
 </div>
@@ -58,7 +58,7 @@ require __DIR__ . '/../../includes/admin_header.php';
             <div class="text-center py-5">
                 <i class="fas fa-blog fa-3x text-muted mb-3"></i>
                 <h5 class="text-muted">No blog posts yet</h5>
-                <a href="/Tamim/admin/blog/create.php" class="btn btn-primary mt-2">
+                <a href="/admin/blog/create.php" class="btn btn-primary mt-2">
                     <i class="fas fa-plus me-2"></i>Write First Post
                 </a>
             </div>
@@ -129,16 +129,16 @@ require __DIR__ . '/../../includes/admin_header.php';
                                 </td>
                                 <td>
                                     <div class="btn-group btn-group-sm">
-                                        <a href="/Tamim/admin/blog/edit.php?id=<?= $post['id'] ?>" class="btn btn-outline-primary" title="Edit">
+                                        <a href="/admin/blog/edit.php?id=<?= $post['id'] ?>" class="btn btn-outline-primary" title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         <?php if ($post['status'] === 'published'): ?>
-                                            <a href="/Tamim/blog/<?= e($post['slug']) ?>" target="_blank" class="btn btn-outline-info" title="View">
+                                            <a href="/blog/<?= e($post['slug']) ?>" target="_blank" class="btn btn-outline-info" title="View">
                                                 <i class="fas fa-eye"></i>
                                             </a>
                                         <?php endif; ?>
                                         <button type="button" class="btn btn-outline-danger" 
-                                                onclick="deleteItem(<?= $post['id'] ?>, '/Tamim/admin/blog/delete.php', 'Are you sure you want to delete this post?')"
+                                                onclick="deleteItem(<?= $post['id'] ?>, '/admin/blog/delete.php', 'Are you sure you want to delete this post?')"
                                                 title="Delete">
                                             <i class="fas fa-trash"></i>
                                         </button>

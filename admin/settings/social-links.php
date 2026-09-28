@@ -7,7 +7,7 @@
 require_once __DIR__ . '/../../includes/bootstrap.php';
 
 if (!auth_check()) {
-    redirect('/Tamim/admin/login.php');
+    redirect('/admin/login.php');
 }
 
 $pageTitle = 'Social Links';
@@ -17,7 +17,7 @@ $socialLinks = db_all('SELECT * FROM social_links ORDER BY sort_order');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!csrf_verify($_POST[config('security.csrf_token_name')] ?? '')) {
-        redirect('/Tamim/admin/settings/social-links/', 'Invalid CSRF token.', 'danger');
+        redirect('/admin/settings/social-links/', 'Invalid CSRF token.', 'danger');
     }
     
     if (isset($_POST['add_social'])) {
@@ -29,11 +29,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sort_order = (int)($_POST['sort_order'] ?? 0);
         
         if (empty($platform) || empty($url)) {
-            redirect('/Tamim/admin/settings/social-links/', 'Platform and URL are required.', 'danger');
+            redirect('/admin/settings/social-links/', 'Platform and URL are required.', 'danger');
         }
         
         db_execute('INSERT INTO social_links (platform, icon_class, url, label, is_active, sort_order) VALUES (?, ?, ?, ?, ?, ?)', [$platform, $icon_class, $url, $label, $is_active, $sort_order]);
-        redirect('/Tamim/admin/settings/social-links/', 'Social link added successfully!');
+        redirect('/admin/settings/social-links/', 'Social link added successfully!');
     }
     
     if (isset($_POST['edit_social'])) {
@@ -46,18 +46,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sort_order = (int)($_POST['sort_order'] ?? 0);
         
         if (empty($platform) || empty($url)) {
-            redirect('/Tamim/admin/settings/social-links/', 'Platform and URL are required.', 'danger');
+            redirect('/admin/settings/social-links/', 'Platform and URL are required.', 'danger');
         }
         
         db_execute('UPDATE social_links SET platform=?, icon_class=?, url=?, label=?, is_active=?, sort_order=?, updated_at=NOW() WHERE id=?', [$platform, $icon_class, $url, $label, $is_active, $sort_order, $id]);
-        redirect('/Tamim/admin/settings/social-links/', 'Social link updated successfully!');
+        redirect('/admin/settings/social-links/', 'Social link updated successfully!');
     }
 }
 
 if (isset($_GET['delete'])) {
     $id = (int)$_GET['delete'];
     db_execute('DELETE FROM social_links WHERE id = ?', [$id]);
-    redirect('/Tamim/admin/settings/social-links/', 'Social link deleted successfully!');
+    redirect('/admin/settings/social-links/', 'Social link deleted successfully!');
 }
 
 require __DIR__ . '/../../includes/admin_header.php';
@@ -171,7 +171,7 @@ require __DIR__ . '/../../includes/admin_header.php';
                                                     onclick="editSocial(<?= htmlspecialchars(json_encode($social)) ?>)">
                                                 <i class="fas fa-edit"></i>
                                             </button>
-                                            <a href="/Tamim/admin/settings/social-links/?delete=<?= $social['id'] ?>" 
+                                            <a href="/admin/settings/social-links/?delete=<?= $social['id'] ?>" 
                                                class="btn btn-sm btn-outline-danger" 
                                                onclick="return confirm('Delete this social link?')">
                                                 <i class="fas fa-trash"></i>

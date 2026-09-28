@@ -313,7 +313,7 @@ require __DIR__ . '/includes/header.php';
                         
                         <div class="project-overlay">
                             <div class="project-links">
-                                <a href="/Tamim/project/<?= e($project['slug']) ?>" class="project-link" title="View Project">
+                                <a href="/project/<?= e($project['slug']) ?>" class="project-link" title="View Project">
                                     <i class="fas fa-eye"></i>
                                 </a>
                                 <?php if ($project['live_url']): ?>
@@ -342,7 +342,7 @@ require __DIR__ . '/includes/header.php';
         </div>
         
         <div class="text-center mt-5 fade-in">
-            <a href="/Tamim/projects.php" class="btn btn-outline-primary btn-lg">
+            <a href="/projects.php" class="btn btn-outline-primary btn-lg">
                 <i class="fas fa-folder-open me-2"></i>View All Projects
             </a>
         </div>
@@ -567,7 +567,7 @@ require __DIR__ . '/includes/header.php';
             
             <div class="col-lg-7 fade-in" style="transition-delay: 0.1s;">
                 <div class="contact-form">
-                    <form id="contactForm" method="POST" action="/Tamim/contact" novalidate>
+                    <form id="contactForm" method="POST" action="/contact" novalidate>
                         <?= csrf_field() ?>
                         
                         <div class="row g-3">

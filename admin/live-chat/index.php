@@ -53,11 +53,11 @@ require __DIR__ . '/../../includes/admin_header.php';
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="h3 mb-0">Live Chat</h1>
     <div class="d-flex gap-2">
-        <a href="/Tamim/admin/live-chat/" class="btn btn-outline-primary">All</a>
-        <a href="/Tamim/admin/live-chat/?status=waiting" class="btn btn-outline-warning">Waiting (<?= $stats['waiting'] ?>)</a>
-        <a href="/Tamim/admin/live-chat/?status=active" class="btn btn-outline-primary">Active (<?= $stats['active'] ?>)</a>
-        <a href="/Tamim/admin/live-chat/?status=expired" class="btn btn-outline-danger">Expired (<?= $stats['expired'] ?>)</a>
-        <a href="/Tamim/admin/live-chat/?status=closed" class="btn btn-outline-secondary">Closed (<?= $stats['closed'] ?>)</a>
+        <a href="/admin/live-chat/" class="btn btn-outline-primary">All</a>
+        <a href="/admin/live-chat/?status=waiting" class="btn btn-outline-warning">Waiting (<?= $stats['waiting'] ?>)</a>
+        <a href="/admin/live-chat/?status=active" class="btn btn-outline-primary">Active (<?= $stats['active'] ?>)</a>
+        <a href="/admin/live-chat/?status=expired" class="btn btn-outline-danger">Expired (<?= $stats['expired'] ?>)</a>
+        <a href="/admin/live-chat/?status=closed" class="btn btn-outline-secondary">Closed (<?= $stats['closed'] ?>)</a>
     </div>
 </div>
 
@@ -129,14 +129,14 @@ require __DIR__ . '/../../includes/admin_header.php';
                                 </td>
                                 <td>
                                     <div class="btn-group btn-group-sm">
-                                        <a href="/Tamim/admin/live-chat/view.php?id=<?= $chat['id'] ?>" class="btn btn-outline-primary" title="View Chat">
+                                        <a href="/admin/live-chat/view.php?id=<?= $chat['id'] ?>" class="btn btn-outline-primary" title="View Chat">
                                             <i class="fas fa-eye"></i>
                                         </a>
                                         <?php if ($chat['status'] !== 'closed'): ?>
-                                            <a href="/Tamim/admin/live-chat/assign.php?id=<?= $chat['id'] ?>&admin_id=<?= $_SESSION['admin_id'] ?>" class="btn btn-outline-success" title="Take Chat">
+                                            <a href="/admin/live-chat/assign.php?id=<?= $chat['id'] ?>&admin_id=<?= $_SESSION['admin_id'] ?>" class="btn btn-outline-success" title="Take Chat">
                                                 <i class="fas fa-comment-dots"></i>
                                             </a>
-                                            <form action="/Tamim/admin/live-chat/close.php" method="POST" style="display:inline;" onsubmit="return confirm('Close this chat?');">
+                                            <form action="/admin/live-chat/close.php" method="POST" style="display:inline;" onsubmit="return confirm('Close this chat?');">
                                                 <?= csrf_field() ?>
                                                 <input type="hidden" name="id" value="<?= $chat['id'] ?>">
                                                 <button type="submit" class="btn btn-outline-danger" title="Close Chat">

@@ -7,14 +7,14 @@
 require_once __DIR__ . '/../../includes/bootstrap.php';
 
 if (!auth_check()) {
-    redirect('/Tamim/admin/login.php');
+    redirect('/admin/login.php');
 }
 
 $id = (int)($_GET['id'] ?? 0);
 $message = db_one('SELECT * FROM messages WHERE id = ?', [$id]);
 
 if (!$message) {
-    redirect('/Tamim/admin/messages/', 'Message not found.', 'danger');
+    redirect('/admin/messages/', 'Message not found.', 'danger');
 }
 
 // Mark as read
@@ -29,7 +29,7 @@ require __DIR__ . '/../../includes/admin_header.php';
 ?>
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="h3 mb-0"><?= e($pageTitle) ?></h1>
-    <a href="/Tamim/admin/messages/" class="btn btn-secondary">
+    <a href="/admin/messages/" class="btn btn-secondary">
         <i class="fas fa-arrow-left me-2"></i>Back to List
     </a>
 </div>
@@ -94,7 +94,7 @@ require __DIR__ . '/../../includes/admin_header.php';
             <div class="card-body">
                 <div class="d-grid gap-2">
                     <?php if (!$message['is_read']): ?>
-                        <a href="/Tamim/admin/messages/?read=<?= $message['id'] ?>" class="btn btn-success">
+                        <a href="/admin/messages/?read=<?= $message['id'] ?>" class="btn btn-success">
                             <i class="fas fa-check me-2"></i>Mark as Read
                         </a>
                     <?php else: ?>
@@ -113,7 +113,7 @@ require __DIR__ . '/../../includes/admin_header.php';
                     
                     <hr>
                     
-                    <a href="/Tamim/admin/messages/?archive=<?= $message['id'] ?>" class="btn btn-outline-secondary" onclick="return confirm('Archive this message?')">
+                    <a href="/admin/messages/?archive=<?= $message['id'] ?>" class="btn btn-outline-secondary" onclick="return confirm('Archive this message?')">
                         <i class="fas fa-archive me-2"></i>Archive
                     </a>
                 </div>
@@ -138,7 +138,7 @@ require __DIR__ . '/../../includes/admin_header.php';
 <div class="modal fade" id="replyModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form method="POST" action="/Tamim/admin/messages/reply.php">
+            <form method="POST" action="/admin/messages/reply.php">
                 <?= csrf_field() ?>
                 <input type="hidden" name="message_id" value="<?= $message['id'] ?>">
                 <div class="modal-header">

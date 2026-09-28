@@ -4,12 +4,12 @@ require_admin();
 
 $id = (int)($_GET['id'] ?? 0);
 if (!$id) {
-    redirect('/Tamim/admin/live-chat/');
+    redirect('/admin/live-chat/');
 }
 
 $chat = db_one('SELECT lc.*, a.full_name as admin_name FROM live_chats lc LEFT JOIN admins a ON lc.assigned_admin_id = a.id WHERE lc.id = ?', [$id]);
 if (!$chat) {
-    redirect('/Tamim/admin/live-chat/', 'Chat not found', 'danger');
+    redirect('/admin/live-chat/', 'Chat not found', 'danger');
 }
 
 // Check if chat is expired (5 minutes inactivity)
@@ -45,9 +45,9 @@ require __DIR__ . '/../../includes/admin_header.php';
     </div>
     <div class="d-flex gap-2">
         <?php if ($chat['status'] !== 'closed'): ?>
-            <a href="/Tamim/admin/live-chat/" class="btn btn-outline-secondary"><i class="fas fa-arrow-left me-1"></i>Back</a>
+            <a href="/admin/live-chat/" class="btn btn-outline-secondary"><i class="fas fa-arrow-left me-1"></i>Back</a>
         <?php else: ?>
-            <a href="/Tamim/admin/live-chat/" class="btn btn-secondary"><i class="fas fa-arrow-left me-1"></i>Back</a>
+            <a href="/admin/live-chat/" class="btn btn-secondary"><i class="fas fa-arrow-left me-1"></i>Back</a>
         <?php endif; ?>
     </div>
 </div>
@@ -70,7 +70,7 @@ require __DIR__ . '/../../includes/admin_header.php';
                     </div>
                 </div>
                 <?php if ($chat['status'] !== 'closed'): ?>
-                    <form action="/Tamim/admin/live-chat/close.php" method="POST" onsubmit="return confirm('Close this chat?');">
+                    <form action="/admin/live-chat/close.php" method="POST" onsubmit="return confirm('Close this chat?');">
                         <?= csrf_field() ?>
                         <input type="hidden" name="id" value="<?= $chat['id'] ?>">
                         <button type="submit" class="btn btn-sm btn-outline-danger">Close Chat</button>
@@ -146,21 +146,21 @@ require __DIR__ . '/../../includes/admin_header.php';
             <div class="card-body">
                 <div class="d-grid gap-2">
                     <?php if ($isExpired): ?>
-                        <form action="/Tamim/admin/live-chat/assign.php" method="POST">
+                        <form action="/admin/live-chat/assign.php" method="POST">
                             <?= csrf_field() ?>
                             <input type="hidden" name="id" value="<?= $chat['id'] ?>">
                             <input type="hidden" name="admin_id" value="<?= $_SESSION['admin_id'] ?>">
                             <button type="submit" class="btn btn-warning">Re-activate Chat</button>
                         </form>
                     <?php elseif ($chat['status'] === 'waiting'): ?>
-                        <form action="/Tamim/admin/live-chat/assign.php" method="POST">
+                        <form action="/admin/live-chat/assign.php" method="POST">
                             <?= csrf_field() ?>
                             <input type="hidden" name="id" value="<?= $chat['id'] ?>">
                             <input type="hidden" name="admin_id" value="<?= $_SESSION['admin_id'] ?>">
                             <button type="submit" class="btn btn-success">Take Chat</button>
                         </form>
                     <?php elseif ($chat['status'] === 'active' && $chat['assigned_admin_id'] == $_SESSION['admin_id']): ?>
-                        <form action="/Tamim/admin/live-chat/close.php" method="POST" onsubmit="return confirm('Close this chat?');">
+                        <form action="/admin/live-chat/close.php" method="POST" onsubmit="return confirm('Close this chat?');">
                             <?= csrf_field() ?>
                             <input type="hidden" name="id" value="<?= $chat['id'] ?>">
                             <button type="submit" class="btn btn-danger">Close Chat</button>
@@ -191,7 +191,7 @@ document.getElementById('adminChatForm')?.addEventListener('submit', async funct
         const formData = new FormData(form);
         formData.append('sender_type', 'admin');
         
-        const response = await fetch('/Tamim/api/live-chat/send', {
+        const response = await fetch('/api/live-chat/send', {
             method: 'POST',
             body: formData
         });

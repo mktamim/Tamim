@@ -10,7 +10,7 @@ $slug = $_GET['slug'] ?? '';
 if (empty($slug)) {
     header('HTTP/1.0 404 Not Found');
     require __DIR__ . '/includes/header.php';
-    echo '<div class="container py-5 text-center"><h1>404 - Post Not Found</h1><a href="/Tamim/blog.php" class="btn btn-primary mt-3">Back to Blog</a></div>';
+    echo '<div class="container py-5 text-center"><h1>404 - Post Not Found</h1><a href="/blog.php" class="btn btn-primary mt-3">Back to Blog</a></div>';
     require __DIR__ . '/includes/footer.php';
     exit;
 }
@@ -19,7 +19,7 @@ $post = blog_post_by_slug($slug);
 if (!$post) {
     header('HTTP/1.0 404 Not Found');
     require __DIR__ . '/includes/header.php';
-    echo '<div class="container py-5 text-center"><h1>404 - Post Not Found</h1><a href="/Tamim/blog.php" class="btn btn-primary mt-3">Back to Blog</a></div>';
+    echo '<div class="container py-5 text-center"><h1>404 - Post Not Found</h1><a href="/blog.php" class="btn btn-primary mt-3">Back to Blog</a></div>';
     require __DIR__ . '/includes/footer.php';
     exit;
 }
@@ -47,10 +47,10 @@ require __DIR__ . '/includes/header.php';
                 <!-- Breadcrumb -->
                 <nav aria-label="breadcrumb" class="mb-4">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="/Tamim/">Home</a></li>
-                        <li class="breadcrumb-item"><a href="/Tamim/blog.php">Blog</a></li>
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item"><a href="/blog.php">Blog</a></li>
                         <?php if ($post['category_name']): ?>
-                            <li class="breadcrumb-item"><a href="/Tamim/blog.php?category=<?= e($post['category_slug']) ?>"><?= e($post['category_name']) ?></a></li>
+                            <li class="breadcrumb-item"><a href="/blog.php?category=<?= e($post['category_slug']) ?>"><?= e($post['category_name']) ?></a></li>
                         <?php endif; ?>
                         <li class="breadcrumb-item active" aria-current="page"><?= e($post['title']) ?></li>
                     </ol>
@@ -59,7 +59,7 @@ require __DIR__ . '/includes/header.php';
                 <!-- Category & Date -->
                 <div class="d-flex flex-wrap gap-2 mb-4">
                     <?php if ($post['category_name']): ?>
-                        <a href="/Tamim/blog.php?category=<?= e($post['category_slug']) ?>" class="badge bg-primary text-decoration-none"><?= e($post['category_name']) ?></a>
+                        <a href="/blog.php?category=<?= e($post['category_slug']) ?>" class="badge bg-primary text-decoration-none"><?= e($post['category_name']) ?></a>
                     <?php endif; ?>
                     <span class="badge bg-secondary"><?= format_date($post['published_at'], 'F d, Y') ?></span>
                     <span class="badge bg-info"><?= $post['views'] ?? 0 ?> Views</span>
@@ -104,7 +104,7 @@ require __DIR__ . '/includes/header.php';
                         <div class="d-flex flex-wrap gap-2">
                             <span class="text-muted small">Tags:</span>
                             <?php foreach ($tags as $tag): ?>
-                                <a href="/Tamim/blog.php?tag=<?= urlencode($tag) ?>" class="badge bg-light text-dark text-decoration-none border px-3 py-2">#<?= e($tag) ?></a>
+                                <a href="/blog.php?tag=<?= urlencode($tag) ?>" class="badge bg-light text-dark text-decoration-none border px-3 py-2">#<?= e($tag) ?></a>
                             <?php endforeach; ?>
                         </div>
                     </div>
@@ -139,11 +139,11 @@ require __DIR__ . '/includes/header.php';
                                 <div class="col-md-4">
                                     <article class="card h-100 border-0 shadow-sm overflow-hidden">
                                         <?php if ($related['featured_image']): ?>
-                                            <a href="/Tamim/blog/<?= e($related['slug']) ?>">
+                                            <a href="/blog/<?= e($related['slug']) ?>">
                                                 <img src="<?= e(setting('site_url', '/Tamim') . '/assets/uploads/blog/' . $related['featured_image']) ?>" alt="" class="card-img-top" style="height: 150px; object-fit: cover;">
                                             </a>
                                         <?php else: ?>
-                                            <a href="/Tamim/blog/<?= e($related['slug']) ?>">
+                                            <a href="/blog/<?= e($related['slug']) ?>">
                                                 <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 150px;">
                                                     <i class="fas fa-blog fa-2x text-muted"></i>
                                                 </div>
@@ -151,7 +151,7 @@ require __DIR__ . '/includes/header.php';
                                         <?php endif; ?>
                                         <div class="card-body">
                                             <h5 class="card-title">
-                                                <a href="/Tamim/blog/<?= e($related['slug']) ?>" class="text-dark text-decoration-none"><?= e($related['title']) ?></a>
+                                                <a href="/blog/<?= e($related['slug']) ?>" class="text-dark text-decoration-none"><?= e($related['title']) ?></a>
                                             </h5>
                                             <small class="text-muted"><?= format_date($related['published_at']) ?></small>
                                         </div>
@@ -164,7 +164,7 @@ require __DIR__ . '/includes/header.php';
                 
                 <!-- Navigation -->
                 <div class="mt-5 pt-4 border-top">
-                    <a href="/Tamim/blog.php" class="btn btn-outline-primary">
+                    <a href="/blog.php" class="btn btn-outline-primary">
                         <i class="fas fa-arrow-left me-2"></i>Back to Blog
                     </a>
                 </div>

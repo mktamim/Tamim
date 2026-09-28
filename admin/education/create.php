@@ -7,7 +7,7 @@
 require_once __DIR__ . '/../../includes/bootstrap.php';
 
 if (!auth_check()) {
-    redirect('/Tamim/admin/login.php');
+    redirect('/admin/login.php');
 }
 
 $isEdit = isset($_GET['id']);
@@ -16,7 +16,7 @@ $education = null;
 if ($isEdit) {
     $education = db_one('SELECT * FROM educations WHERE id = ?', [(int)$_GET['id']]);
     if (!$education) {
-        redirect('/Tamim/admin/education/', 'Education not found.', 'danger');
+        redirect('/admin/education/', 'Education not found.', 'danger');
     }
     $pageTitle = 'Edit Education';
 } else {
@@ -93,12 +93,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $sql = 'UPDATE educations SET degree=?, institution=?, subject=?, location=?, start_year=?, end_year=?, is_current=?, description=?, grade=?, institution_logo=?, institution_url=?, is_active=?, sort_order=?, updated_at=NOW() WHERE id=?';
                 $params = [$formData['degree'], $formData['institution'], $formData['subject'], $formData['location'], $formData['start_year'], $formData['end_year'], $formData['is_current'], $formData['description'], $formData['grade'], $formData['institution_logo'], $formData['institution_url'], $formData['is_active'], $formData['sort_order'], $education['id']];
                 db_execute($sql, $params);
-                redirect('/Tamim/admin/education/', 'Education updated successfully!');
+                redirect('/admin/education/', 'Education updated successfully!');
             } else {
                 $sql = 'INSERT INTO educations (degree, institution, subject, location, start_year, end_year, is_current, description, grade, institution_logo, institution_url, is_active, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
                 $params = [$formData['degree'], $formData['institution'], $formData['subject'], $formData['location'], $formData['start_year'], $formData['end_year'], $formData['is_current'], $formData['description'], $formData['grade'], $formData['institution_logo'], $formData['institution_url'], $formData['is_active'], $formData['sort_order']];
                 db_execute($sql, $params);
-                redirect('/Tamim/admin/education/', 'Education created successfully!');
+                redirect('/admin/education/', 'Education created successfully!');
             }
         }
     }
@@ -108,7 +108,7 @@ require __DIR__ . '/../../includes/admin_header.php';
 ?>
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="h3 mb-0"><?= e($pageTitle) ?></h1>
-    <a href="/Tamim/admin/education/" class="btn btn-secondary">
+    <a href="/admin/education/" class="btn btn-secondary">
         <i class="fas fa-arrow-left me-2"></i>Back to List
     </a>
 </div>
@@ -224,7 +224,7 @@ require __DIR__ . '/../../includes/admin_header.php';
         <button type="submit" class="btn btn-primary">
             <i class="fas fa-save me-2"></i><?= $isEdit ? 'Update' : 'Create' ?> Education
         </button>
-        <a href="/Tamim/admin/education/" class="btn btn-secondary ms-2">Cancel</a>
+        <a href="/admin/education/" class="btn btn-secondary ms-2">Cancel</a>
     </div>
 </form>
 

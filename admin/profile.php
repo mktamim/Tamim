@@ -7,7 +7,7 @@
 require_once __DIR__ . '/../../includes/bootstrap.php';
 
 if (!auth_check()) {
-    redirect('/Tamim/admin/login.php');
+    redirect('/admin/login.php');
 }
 
 $pageTitle = 'Profile';
@@ -135,7 +135,7 @@ require __DIR__ . '/../includes/admin_header.php';
                 <h5 class="mb-0">Change Password</h5>
             </div>
             <div class="card-body">
-                <form method="POST" action="/Tamim/admin/change-password.php">
+                <form method="POST" action="/admin/change-password.php">
                     <?= csrf_field() ?>
                     
                     <div class="mb-3">

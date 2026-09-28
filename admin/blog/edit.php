@@ -7,7 +7,7 @@
 require_once __DIR__ . '/../../includes/bootstrap.php';
 
 if (!auth_check()) {
-    redirect('/Tamim/admin/login.php');
+    redirect('/admin/login.php');
 }
 
 $isEdit = isset($_GET['id']);
@@ -17,7 +17,7 @@ $categories = db_all('SELECT * FROM blog_categories WHERE is_active = 1 ORDER BY
 if ($isEdit) {
     $post = db_one('SELECT * FROM blog_posts WHERE id = ?', [(int)$_GET['id']]);
     if (!$post) {
-        redirect('/Tamim/admin/blog/', 'Post not found.', 'danger');
+        redirect('/admin/blog/', 'Post not found.', 'danger');
     }
     $pageTitle = 'Edit Post';
 } else {
@@ -114,12 +114,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $sql = 'UPDATE blog_posts SET category_id=?, title=?, slug=?, excerpt=?, content=?, featured_image=?, tags=?, status=?, is_featured=?, meta_title=?, meta_description=?, meta_keywords=?, published_at=?, updated_at=NOW() WHERE id=?';
                 $params = [$formData['category_id'], $formData['title'], $formData['slug'], $formData['excerpt'], $formData['content'], $formData['featured_image'], $tagsJson, $formData['status'], $formData['is_featured'], $formData['meta_title'], $formData['meta_description'], $formData['meta_keywords'], $formData['published_at'], $post['id']];
                 db_execute($sql, $params);
-                redirect('/Tamim/admin/blog/', 'Post updated successfully!');
+                redirect('/admin/blog/', 'Post updated successfully!');
             } else {
                 $sql = 'INSERT INTO blog_posts (category_id, title, slug, excerpt, content, featured_image, tags, status, is_featured, meta_title, meta_description, meta_keywords, published_at, author_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
                 $params = [$formData['category_id'], $formData['title'], $formData['slug'], $formData['excerpt'], $formData['content'], $formData['featured_image'], $tagsJson, $formData['status'], $formData['is_featured'], $formData['meta_title'], $formData['meta_description'], $formData['meta_keywords'], $formData['published_at'], $_SESSION['admin_id']];
                 db_execute($sql, $params);
-                redirect('/Tamim/admin/blog/', 'Post created successfully!');
+                redirect('/admin/blog/', 'Post created successfully!');
             }
         }
     }
@@ -129,7 +129,7 @@ require __DIR__ . '/../../includes/admin_header.php';
 ?>
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="h3 mb-0"><?= e($pageTitle) ?></h1>
-    <a href="/Tamim/admin/blog/" class="btn btn-secondary">
+    <a href="/admin/blog/" class="btn btn-secondary">
         <i class="fas fa-arrow-left me-2"></i>Back to List
     </a>
 </div>
@@ -257,11 +257,11 @@ require __DIR__ . '/../../includes/admin_header.php';
             <i class="fas fa-save me-2"></i><?= $isEdit ? 'Update' : 'Create' ?> Post
         </button>
         <?php if ($isEdit && $formData['status'] === 'published'): ?>
-            <a href="/Tamim/blog/<?= e($formData['slug']) ?>" target="_blank" class="btn btn-info ms-2">
+            <a href="/blog/<?= e($formData['slug']) ?>" target="_blank" class="btn btn-info ms-2">
                 <i class="fas fa-external-link-alt me-2"></i>View Live
             </a>
         <?php endif; ?>
-        <a href="/Tamim/admin/blog/" class="btn btn-secondary ms-2">Cancel</a>
+        <a href="/admin/blog/" class="btn btn-secondary ms-2">Cancel</a>
     </div>
 </form>
 

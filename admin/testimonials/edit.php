@@ -7,7 +7,7 @@
 require_once __DIR__ . '/../../includes/bootstrap.php';
 
 if (!auth_check()) {
-    redirect('/Tamim/admin/login.php');
+    redirect('/admin/login.php');
 }
 
 $isEdit = isset($_GET['id']);
@@ -16,7 +16,7 @@ $testimonial = null;
 if ($isEdit) {
     $testimonial = db_one('SELECT * FROM testimonials WHERE id = ?', [(int)$_GET['id']]);
     if (!$testimonial) {
-        redirect('/Tamim/admin/testimonials/', 'Testimonial not found.', 'danger');
+        redirect('/admin/testimonials/', 'Testimonial not found.', 'danger');
     }
     $pageTitle = 'Edit Testimonial';
 } else {
@@ -91,12 +91,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $sql = 'UPDATE testimonials SET client_name=?, client_designation=?, client_company=?, client_image=?, review=?, rating=?, project_name=?, is_active=?, is_featured=?, sort_order=?, updated_at=NOW() WHERE id=?';
                 $params = [$formData['client_name'], $formData['client_designation'], $formData['client_company'], $formData['client_image'], $formData['review'], $formData['rating'], $formData['project_name'], $formData['is_active'], $formData['is_featured'], $formData['sort_order'], $testimonial['id']];
                 db_execute($sql, $params);
-                redirect('/Tamim/admin/testimonials/', 'Testimonial updated successfully!');
+                redirect('/admin/testimonials/', 'Testimonial updated successfully!');
             } else {
                 $sql = 'INSERT INTO testimonials (client_name, client_designation, client_company, client_image, review, rating, project_name, is_active, is_featured, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
                 $params = [$formData['client_name'], $formData['client_designation'], $formData['client_company'], $formData['client_image'], $formData['review'], $formData['rating'], $formData['project_name'], $formData['is_active'], $formData['is_featured'], $formData['sort_order']];
                 db_execute($sql, $params);
-                redirect('/Tamim/admin/testimonials/', 'Testimonial created successfully!');
+                redirect('/admin/testimonials/', 'Testimonial created successfully!');
             }
         }
     }
@@ -106,7 +106,7 @@ require __DIR__ . '/../../includes/admin_header.php';
 ?>
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="h3 mb-0"><?= e($pageTitle) ?></h1>
-    <a href="/Tamim/admin/testimonials/" class="btn btn-secondary">
+    <a href="/admin/testimonials/" class="btn btn-secondary">
         <i class="fas fa-arrow-left me-2"></i>Back to List
     </a>
 </div>
@@ -216,7 +216,7 @@ require __DIR__ . '/../../includes/admin_header.php';
         <button type="submit" class="btn btn-primary">
             <i class="fas fa-save me-2"></i><?= $isEdit ? 'Update' : 'Create' ?> Testimonial
         </button>
-        <a href="/Tamim/admin/testimonials/" class="btn btn-secondary ms-2">Cancel</a>
+        <a href="/admin/testimonials/" class="btn btn-secondary ms-2">Cancel</a>
     </div>
 </form>
 

@@ -7,7 +7,7 @@
 require_once __DIR__ . '/../../includes/bootstrap.php';
 
 if (!auth_check()) {
-    redirect('/Tamim/admin/login.php');
+    redirect('/admin/login.php');
 }
 
 $pageTitle = 'Messages';
@@ -20,18 +20,18 @@ $offset = ($page - 1) * $perPage;
 $total = db_one('SELECT COUNT(*) as c FROM messages WHERE is_archived = 0')['c'] ?? 0;
 $messages = db_all('SELECT * FROM messages WHERE is_archived = 0 ORDER BY created_at DESC LIMIT ? OFFSET ?', [$perPage, $offset]);
 
-$pagination = paginate($total, $perPage, $page, '/Tamim/admin/messages/');
+$pagination = paginate($total, $perPage, $page, '/admin/messages/');
 
 // Mark as read if requested
 if (isset($_GET['read']) && is_numeric($_GET['read'])) {
     db_execute('UPDATE messages SET is_read = 1 WHERE id = ?', [(int)$_GET['read']]);
-    redirect('/Tamim/admin/messages/');
+    redirect('/admin/messages/');
 }
 
 // Archive if requested
 if (isset($_GET['archive']) && is_numeric($_GET['archive'])) {
     db_execute('UPDATE messages SET is_archived = 1 WHERE id = ?', [(int)$_GET['archive']]);
-    redirect('/Tamim/admin/messages/');
+    redirect('/admin/messages/');
 }
 
 require __DIR__ . '/../../includes/admin_header.php';
@@ -87,15 +87,15 @@ require __DIR__ . '/../../includes/admin_header.php';
                                 </td>
                                 <td>
                                     <div class="btn-group btn-group-sm">
-                                        <a href="/Tamim/admin/messages/view.php?id=<?= $msg['id'] ?>" class="btn btn-outline-primary" title="View">
+                                        <a href="/admin/messages/view.php?id=<?= $msg['id'] ?>" class="btn btn-outline-primary" title="View">
                                             <i class="fas fa-eye"></i>
                                         </a>
                                         <?php if (!$msg['is_read']): ?>
-                                            <a href="/Tamim/admin/messages/?read=<?= $msg['id'] ?>" class="btn btn-outline-success" title="Mark as Read">
+                                            <a href="/admin/messages/?read=<?= $msg['id'] ?>" class="btn btn-outline-success" title="Mark as Read">
                                                 <i class="fas fa-check"></i>
                                             </a>
                                         <?php endif; ?>
-                                        <a href="/Tamim/admin/messages/?archive=<?= $msg['id'] ?>" class="btn btn-outline-secondary" title="Archive" onclick="return confirm('Archive this message?')">
+                                        <a href="/admin/messages/?archive=<?= $msg['id'] ?>" class="btn btn-outline-secondary" title="Archive" onclick="return confirm('Archive this message?')">
                                             <i class="fas fa-archive"></i>
                                         </a>
                                     </div>

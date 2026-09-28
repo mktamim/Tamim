@@ -7,7 +7,7 @@
 require_once __DIR__ . '/../../includes/bootstrap.php';
 
 if (!auth_check()) {
-    redirect('/Tamim/admin/login.php');
+    redirect('/admin/login.php');
 }
 
 $pageTitle = 'About Settings';
@@ -17,7 +17,7 @@ $settings = db_all('SELECT * FROM settings WHERE group_name = "about" ORDER BY s
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_about'])) {
     if (!csrf_verify($_POST[config('security.csrf_token_name')] ?? '')) {
-        redirect('/Tamim/admin/about/', 'Invalid CSRF token.', 'danger');
+        redirect('/admin/about/', 'Invalid CSRF token.', 'danger');
     }
     
     foreach ($_POST as $key => $value) {
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_about'])) {
         }
     }
     
-    redirect('/Tamim/admin/about/', 'About settings saved successfully!');
+    redirect('/admin/about/', 'About settings saved successfully!');
 }
 
 require __DIR__ . '/../../includes/admin_header.php';
@@ -113,7 +113,7 @@ require __DIR__ . '/../../includes/admin_header.php';
         <button type="submit" name="save_about" class="btn btn-primary">
             <i class="fas fa-save me-2"></i>Save About Settings
         </button>
-        <a href="/Tamim/admin/dashboard.php" class="btn btn-secondary ms-2">Cancel</a>
+        <a href="/admin/dashboard.php" class="btn btn-secondary ms-2">Cancel</a>
     </div>
 </form>
 <?php require __DIR__ . '/../../includes/admin_footer.php'; ?>

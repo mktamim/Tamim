@@ -8,7 +8,7 @@ require_once __DIR__ . '/../includes/bootstrap.php';
 
 // Require authentication
 if (!auth_check()) {
-    redirect('/Tamim/admin/login.php');
+    redirect('/admin/login.php');
 }
 
 $pageTitle = 'Dashboard';
@@ -125,7 +125,7 @@ require __DIR__ . '/../includes/admin_header.php';
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0"><i class="fas fa-envelope me-2"></i>Recent Messages</h5>
-                <a href="/Tamim/admin/messages/" class="btn btn-sm btn-outline-primary">View All</a>
+                <a href="/admin/messages/" class="btn btn-sm btn-outline-primary">View All</a>
             </div>
             <div class="card-body p-0">
                 <?php if (empty($recentMessages)): ?>
@@ -136,7 +136,7 @@ require __DIR__ . '/../includes/admin_header.php';
                 <?php else: ?>
                     <div class="list-group list-group-flush">
                         <?php foreach ($recentMessages as $msg): ?>
-                            <a href="/Tamim/admin/messages/view.php?id=<?= $msg['id'] ?>" class="list-group-item list-group-item-action">
+                            <a href="/admin/messages/view.php?id=<?= $msg['id'] ?>" class="list-group-item list-group-item-action">
                                 <div class="d-flex justify-content-between">
                                     <h6 class="mb-1 <?= !$msg['is_read'] ? 'fw-bold' : '' ?>">
                                         <?= e($msg['name']) ?>
@@ -161,7 +161,7 @@ require __DIR__ . '/../includes/admin_header.php';
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0"><i class="fas fa-folder-open me-2"></i>Recent Projects</h5>
-                <a href="/Tamim/admin/projects/" class="btn btn-sm btn-outline-primary">View All</a>
+                <a href="/admin/projects/" class="btn btn-sm btn-outline-primary">View All</a>
             </div>
             <div class="card-body p-0">
                 <?php if (empty($recentProjects)): ?>
@@ -172,7 +172,7 @@ require __DIR__ . '/../includes/admin_header.php';
                 <?php else: ?>
                     <div class="list-group list-group-flush">
                         <?php foreach ($recentProjects as $project): ?>
-                            <a href="/Tamim/admin/projects/edit.php?id=<?= $project['id'] ?>" class="list-group-item list-group-item-action">
+                            <a href="/admin/projects/edit.php?id=<?= $project['id'] ?>" class="list-group-item list-group-item-action">
                                 <div class="d-flex align-items-center">
                                     <?php if ($project['cover_image']): ?>
                                         <img src="<?= e(setting('site_url', '/Tamim') . '/assets/uploads/projects/' . $project['cover_image']) ?>" alt="" class="rounded me-3" style="width: 50px; height: 50px; object-fit: cover;">
@@ -208,49 +208,49 @@ require __DIR__ . '/../includes/admin_header.php';
             <div class="card-body">
                 <div class="row g-3">
                     <div class="col-md-3">
-                        <a href="/Tamim/admin/projects/create.php" class="btn btn-outline-primary w-100 py-3">
+                        <a href="/admin/projects/create.php" class="btn btn-outline-primary w-100 py-3">
                             <i class="fas fa-plus fa-2x d-block mb-2"></i>
                             Add Project
                         </a>
                     </div>
                     <div class="col-md-3">
-                        <a href="/Tamim/admin/services/create.php" class="btn btn-outline-success w-100 py-3">
+                        <a href="/admin/services/create.php" class="btn btn-outline-success w-100 py-3">
                             <i class="fas fa-plus fa-2x d-block mb-2"></i>
                             Add Service
                         </a>
                     </div>
                     <div class="col-md-3">
-                        <a href="/Tamim/admin/skills/create.php" class="btn btn-outline-warning w-100 py-3">
+                        <a href="/admin/skills/create.php" class="btn btn-outline-warning w-100 py-3">
                             <i class="fas fa-plus fa-2x d-block mb-2"></i>
                             Add Skill
                         </a>
                     </div>
                     <div class="col-md-3">
-                        <a href="/Tamim/admin/testimonials/create.php" class="btn btn-outline-info w-100 py-3">
+                        <a href="/admin/testimonials/create.php" class="btn btn-outline-info w-100 py-3">
                             <i class="fas fa-plus fa-2x d-block mb-2"></i>
                             Add Testimonial
                         </a>
                     </div>
                     <div class="col-md-3">
-                        <a href="/Tamim/admin/experience/create.php" class="btn btn-outline-secondary w-100 py-3">
+                        <a href="/admin/experience/create.php" class="btn btn-outline-secondary w-100 py-3">
                             <i class="fas fa-plus fa-2x d-block mb-2"></i>
                             Add Experience
                         </a>
                     </div>
                     <div class="col-md-3">
-                        <a href="/Tamim/admin/education/create.php" class="btn btn-outline-dark w-100 py-3">
+                        <a href="/admin/education/create.php" class="btn btn-outline-dark w-100 py-3">
                             <i class="fas fa-plus fa-2x d-block mb-2"></i>
                             Add Education
                         </a>
                     </div>
                     <div class="col-md-3">
-                        <a href="/Tamim/admin/blog/create.php" class="btn btn-outline-purple w-100 py-3">
+                        <a href="/admin/blog/create.php" class="btn btn-outline-purple w-100 py-3">
                             <i class="fas fa-plus fa-2x d-block mb-2"></i>
                             Write Blog Post
                         </a>
                     </div>
                     <div class="col-md-3">
-                        <a href="/Tamim/admin/settings/" class="btn btn-outline-teal w-100 py-3">
+                        <a href="/admin/settings/" class="btn btn-outline-teal w-100 py-3">
                             <i class="fas fa-cog fa-2x d-block mb-2"></i>
                             Site Settings
                         </a>

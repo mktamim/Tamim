@@ -24,7 +24,7 @@ $posts = db_all('SELECT bp.*, bc.name as category_name, bc.slug as category_slug
 
 $categories = blog_categories();
 
-$pagination = paginate($total, $perPage, $page, '/Tamim/blog.php' . ($category ? '?category=' . $category : ''));
+$pagination = paginate($total, $perPage, $page, '/blog.php' . ($category ? '?category=' . $category : ''));
 
 $pageTitle = 'Blog | ' . setting('site_name');
 $pageDescription = 'Latest articles and tutorials on web development, PHP, Laravel, and more.';
@@ -59,11 +59,11 @@ require __DIR__ . '/includes/header.php';
                     <div class="card-body p-0">
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item px-3 py-2 <?= empty($category) ? 'active' : '' ?>">
-                                <a href="/Tamim/blog.php" class="text-decoration-none d-block">All Posts</a>
+                                <a href="/blog.php" class="text-decoration-none d-block">All Posts</a>
                             </li>
                             <?php foreach ($categories as $cat): ?>
                                 <li class="list-group-item px-3 py-2 <?= $category === $cat['slug'] ? 'active' : '' ?>">
-                                    <a href="/Tamim/blog.php?category=<?= e($cat['slug']) ?>" class="text-decoration-none d-block">
+                                    <a href="/blog.php?category=<?= e($cat['slug']) ?>" class="text-decoration-none d-block">
                                         <?= e($cat['name']) ?>
                                     </a>
                                 </li>
@@ -87,11 +87,11 @@ require __DIR__ . '/includes/header.php';
                             <div class="col-md-6 fade-in" style="transition-delay: <?= $index * 0.1 ?>s;">
                                 <article class="card h-100 border-0 shadow-sm overflow-hidden">
                                     <?php if ($post['featured_image']): ?>
-                                        <a href="/Tamim/blog/<?= e($post['slug']) ?>">
+                                        <a href="/blog/<?= e($post['slug']) ?>">
                                             <img src="<?= e(setting('site_url', '/Tamim') . '/assets/uploads/blog/' . $post['featured_image']) ?>" alt="<?= e($post['title']) ?>" class="card-img-top" style="height: 200px; object-fit: cover;">
                                         </a>
                                     <?php else: ?>
-                                        <a href="/Tamim/blog/<?= e($post['slug']) ?>">
+                                        <a href="/blog/<?= e($post['slug']) ?>">
                                             <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
                                                 <i class="fas fa-blog fa-3x text-muted"></i>
                                             </div>
@@ -101,13 +101,13 @@ require __DIR__ . '/includes/header.php';
                                     <div class="card-body d-flex flex-column">
                                         <div class="mb-2">
                                             <?php if ($post['category_name']): ?>
-                                                <a href="/Tamim/blog.php?category=<?= e($post['category_slug']) ?>" class="badge bg-primary text-decoration-none"><?= e($post['category_name']) ?></a>
+                                                <a href="/blog.php?category=<?= e($post['category_slug']) ?>" class="badge bg-primary text-decoration-none"><?= e($post['category_name']) ?></a>
                                             <?php endif; ?>
                                             <span class="badge bg-secondary ms-1"><?= format_date($post['published_at']) ?></span>
                                         </div>
                                         
                                         <h3 class="card-title h5 mb-3">
-                                            <a href="/Tamim/blog/<?= e($post['slug']) ?>" class="text-dark text-decoration-none"><?= e($post['title']) ?></a>
+                                            <a href="/blog/<?= e($post['slug']) ?>" class="text-dark text-decoration-none"><?= e($post['title']) ?></a>
                                         </h3>
                                         
                                         <p class="card-text text-muted small flex-grow-1"><?= e(mb_strimwidth($post['excerpt'] ?? $post['content'] ?? '', 0, 120, '...')) ?></p>
@@ -119,7 +119,7 @@ require __DIR__ . '/includes/header.php';
                                                 </div>
                                                 <small class="text-muted"><?= e($post['author_name'] ?? 'Admin') ?></small>
                                             </div>
-                                            <a href="/Tamim/blog/<?= e($post['slug']) ?>" class="btn btn-sm btn-outline-primary">Read More</a>
+                                            <a href="/blog/<?= e($post['slug']) ?>" class="btn btn-sm btn-outline-primary">Read More</a>
                                         </div>
                                     </div>
                                 </article>

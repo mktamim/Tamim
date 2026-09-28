@@ -128,7 +128,7 @@ function is_logged_in(): bool
 function require_admin(): void
 {
     if (!auth_check()) {
-        redirect('/Tamim/admin/login.php');
+        redirect('/admin/login.php');
     }
 }
 

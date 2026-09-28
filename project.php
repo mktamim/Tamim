@@ -10,7 +10,7 @@ $slug = $_GET['slug'] ?? '';
 if (empty($slug)) {
     header('HTTP/1.0 404 Not Found');
     require __DIR__ . '/includes/header.php';
-    echo '<div class="container py-5 text-center"><h1>404 - Project Not Found</h1><a href="/Tamim/" class="btn btn-primary mt-3">Back to Home</a></div>';
+    echo '<div class="container py-5 text-center"><h1>404 - Project Not Found</h1><a href="/" class="btn btn-primary mt-3">Back to Home</a></div>';
     require __DIR__ . '/includes/footer.php';
     exit;
 }
@@ -19,7 +19,7 @@ $project = project_by_slug($slug);
 if (!$project) {
     header('HTTP/1.0 404 Not Found');
     require __DIR__ . '/includes/header.php';
-    echo '<div class="container py-5 text-center"><h1>404 - Project Not Found</h1><a href="/Tamim/" class="btn btn-primary mt-3">Back to Home</a></div>';
+    echo '<div class="container py-5 text-center"><h1>404 - Project Not Found</h1><a href="/" class="btn btn-primary mt-3">Back to Home</a></div>';
     require __DIR__ . '/includes/footer.php';
     exit;
 }
@@ -41,8 +41,8 @@ require __DIR__ . '/includes/header.php';
     <div class="container">
         <nav aria-label="breadcrumb" class="mb-4">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/Tamim/">Home</a></li>
-                <li class="breadcrumb-item"><a href="/Tamim/#projects">Projects</a></li>
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="/#projects">Projects</a></li>
                 <li class="breadcrumb-item active" aria-current="page"><?= e($project['title']) ?></li>
             </ol>
         </nav>
@@ -196,7 +196,7 @@ require __DIR__ . '/includes/header.php';
         <!-- Navigation -->
         <div class="row mt-5 pt-5 border-top">
             <div class="col-12 text-center">
-                <a href="/Tamim/#projects" class="btn btn-outline-primary">
+                <a href="/#projects" class="btn btn-outline-primary">
                     <i class="fas fa-arrow-left me-2"></i>Back to Projects
                 </a>
             </div>

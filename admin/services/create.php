@@ -7,7 +7,7 @@
 require_once __DIR__ . '/../../includes/bootstrap.php';
 
 if (!auth_check()) {
-    redirect('/Tamim/admin/login.php');
+    redirect('/admin/login.php');
 }
 
 $isEdit = isset($_GET['id']);
@@ -16,7 +16,7 @@ $service = null;
 if ($isEdit) {
     $service = db_one('SELECT * FROM services WHERE id = ?', [(int)$_GET['id']]);
     if (!$service) {
-        redirect('/Tamim/admin/services/', 'Service not found.', 'danger');
+        redirect('/admin/services/', 'Service not found.', 'danger');
     }
     $pageTitle = 'Edit Service';
 } else {
@@ -100,12 +100,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $sql = 'UPDATE services SET title=?, slug=?, short_description=?, full_description=?, icon_class=?, icon_type=?, icon_image=?, features=?, is_active=?, is_featured=?, sort_order=?, updated_at=NOW() WHERE id=?';
                 $params = [$formData['title'], $formData['slug'], $formData['short_description'], $formData['full_description'], $formData['icon_class'], $formData['icon_type'], $formData['icon_image'], $featuresJson, $formData['is_active'], $formData['is_featured'], $formData['sort_order'], $service['id']];
                 db_execute($sql, $params);
-                redirect('/Tamim/admin/services/', 'Service updated successfully!');
+                redirect('/admin/services/', 'Service updated successfully!');
             } else {
                 $sql = 'INSERT INTO services (title, slug, short_description, full_description, icon_class, icon_type, icon_image, features, is_active, is_featured, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
                 $params = [$formData['title'], $formData['slug'], $formData['short_description'], $formData['full_description'], $formData['icon_class'], $formData['icon_type'], $formData['icon_image'], $featuresJson, $formData['is_active'], $formData['is_featured'], $formData['sort_order']];
                 db_execute($sql, $params);
-                redirect('/Tamim/admin/services/', 'Service created successfully!');
+                redirect('/admin/services/', 'Service created successfully!');
             }
         }
     }
@@ -115,7 +115,7 @@ require __DIR__ . '/../../includes/admin_header.php';
 ?>
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="h3 mb-0"><?= e($pageTitle) ?></h1>
-    <a href="/Tamim/admin/services/" class="btn btn-secondary">
+    <a href="/admin/services/" class="btn btn-secondary">
         <i class="fas fa-arrow-left me-2"></i>Back to List
     </a>
 </div>
@@ -222,7 +222,7 @@ require __DIR__ . '/../../includes/admin_header.php';
         <button type="submit" class="btn btn-primary">
             <i class="fas fa-save me-2"></i><?= $isEdit ? 'Update' : 'Create' ?> Service
         </button>
-        <a href="/Tamim/admin/services/" class="btn btn-secondary ms-2">Cancel</a>
+        <a href="/admin/services/" class="btn btn-secondary ms-2">Cancel</a>
     </div>
 </form>
 

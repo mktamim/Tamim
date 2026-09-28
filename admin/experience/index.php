@@ -7,7 +7,7 @@
 require_once __DIR__ . '/../../includes/bootstrap.php';
 
 if (!auth_check()) {
-    redirect('/Tamim/admin/login.php');
+    redirect('/admin/login.php');
 }
 
 $pageTitle = 'Experience';
@@ -19,7 +19,7 @@ require __DIR__ . '/../../includes/admin_header.php';
 ?>
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="h3 mb-0"><?= e($pageTitle) ?></h1>
-    <a href="/Tamim/admin/experience/create.php" class="btn btn-primary">
+    <a href="/admin/experience/create.php" class="btn btn-primary">
         <i class="fas fa-plus me-2"></i>Add Experience
     </a>
 </div>
@@ -30,7 +30,7 @@ require __DIR__ . '/../../includes/admin_header.php';
             <div class="text-center py-5">
                 <i class="fas fa-briefcase fa-3x text-muted mb-3"></i>
                 <h5 class="text-muted">No experience entries yet</h5>
-                <a href="/Tamim/admin/experience/create.php" class="btn btn-primary mt-2">
+                <a href="/admin/experience/create.php" class="btn btn-primary mt-2">
                     <i class="fas fa-plus me-2"></i>Add Experience
                 </a>
             </div>
@@ -71,11 +71,11 @@ require __DIR__ . '/../../includes/admin_header.php';
                                 <td><?= $exp['sort_order'] ?></td>
                                 <td>
                                     <div class="btn-group btn-group-sm">
-                                        <a href="/Tamim/admin/experience/edit.php?id=<?= $exp['id'] ?>" class="btn btn-outline-primary" title="Edit">
+                                        <a href="/admin/experience/edit.php?id=<?= $exp['id'] ?>" class="btn btn-outline-primary" title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         <button type="button" class="btn btn-outline-danger" 
-                                                onclick="deleteItem(<?= $exp['id'] ?>, '/Tamim/admin/experience/delete.php', 'Are you sure you want to delete this experience?')"
+                                                onclick="deleteItem(<?= $exp['id'] ?>, '/admin/experience/delete.php', 'Are you sure you want to delete this experience?')"
                                                 title="Delete">
                                             <i class="fas fa-trash"></i>
                                         </button>

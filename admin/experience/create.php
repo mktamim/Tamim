@@ -7,7 +7,7 @@
 require_once __DIR__ . '/../../includes/bootstrap.php';
 
 if (!auth_check()) {
-    redirect('/Tamim/admin/login.php');
+    redirect('/admin/login.php');
 }
 
 $isEdit = isset($_GET['id']);
@@ -16,7 +16,7 @@ $experience = null;
 if ($isEdit) {
     $experience = db_one('SELECT * FROM experiences WHERE id = ?', [(int)$_GET['id']]);
     if (!$experience) {
-        redirect('/Tamim/admin/experience/', 'Experience not found.', 'danger');
+        redirect('/admin/experience/', 'Experience not found.', 'danger');
     }
     $pageTitle = 'Edit Experience';
 } else {
@@ -102,12 +102,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $sql = 'UPDATE experiences SET company_name=?, position=?, location=?, start_date=?, end_date=?, is_current=?, description=?, achievements=?, technologies=?, company_logo=?, company_url=?, is_active=?, sort_order=?, updated_at=NOW() WHERE id=?';
                 $params = [$formData['company_name'], $formData['position'], $formData['location'], $formData['start_date'], $formData['end_date'], $formData['is_current'], $formData['description'], $achievementsJson, $techJson, $formData['company_logo'], $formData['company_url'], $formData['is_active'], $formData['sort_order'], $experience['id']];
                 db_execute($sql, $params);
-                redirect('/Tamim/admin/experience/', 'Experience updated successfully!');
+                redirect('/admin/experience/', 'Experience updated successfully!');
             } else {
                 $sql = 'INSERT INTO experiences (company_name, position, location, start_date, end_date, is_current, description, achievements, technologies, company_logo, company_url, is_active, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
                 $params = [$formData['company_name'], $formData['position'], $formData['location'], $formData['start_date'], $formData['end_date'], $formData['is_current'], $formData['description'], $achievementsJson, $techJson, $formData['company_logo'], $formData['company_url'], $formData['is_active'], $formData['sort_order']];
                 db_execute($sql, $params);
-                redirect('/Tamim/admin/experience/', 'Experience created successfully!');
+                redirect('/admin/experience/', 'Experience created successfully!');
             }
         }
     }
@@ -117,7 +117,7 @@ require __DIR__ . '/../../includes/admin_header.php';
 ?>
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="h3 mb-0"><?= e($pageTitle) ?></h1>
-    <a href="/Tamim/admin/experience/" class="btn btn-secondary">
+    <a href="/admin/experience/" class="btn btn-secondary">
         <i class="fas fa-arrow-left me-2"></i>Back to List
     </a>
 </div>
@@ -265,7 +265,7 @@ require __DIR__ . '/../../includes/admin_header.php';
         <button type="submit" class="btn btn-primary">
             <i class="fas fa-save me-2"></i><?= $isEdit ? 'Update' : 'Create' ?> Experience
         </button>
-        <a href="/Tamim/admin/experience/" class="btn btn-secondary ms-2">Cancel</a>
+        <a href="/admin/experience/" class="btn btn-secondary ms-2">Cancel</a>
     </div>
 </form>
 

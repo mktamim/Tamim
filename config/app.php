@@ -31,7 +31,7 @@ return [
     ],
     'upload' => [
         'path' => __DIR__ . '/../assets/uploads',
-        'url' => '/Tamim/assets/uploads',
+        'url' => '/assets/uploads',
         'max_size' => 5 * 1024 * 1024, // 5MB
         'allowed_types' => ['image/jpeg', 'image/png', 'image/webp'],
         'allowed_extensions' => ['jpg', 'jpeg', 'png', 'webp'],

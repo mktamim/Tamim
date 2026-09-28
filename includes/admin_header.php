@@ -36,7 +36,7 @@ $currentPage = $currentPage ?? '';
         <!-- Sidebar -->
         <aside class="admin-sidebar" id="adminSidebar">
             <div class="sidebar-header">
-                <a href="/Tamim/admin/dashboard.php" class="sidebar-brand">
+                <a href="/admin/dashboard.php" class="sidebar-brand">
                     <i class="fas fa-code brand-icon"></i>
                     <span class="brand-text">Admin Panel</span>
                 </a>
@@ -47,69 +47,69 @@ $currentPage = $currentPage ?? '';
             <nav class="sidebar-nav">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link <?= $currentPage === 'dashboard' ? 'active' : '' ?>" href="/Tamim/admin/dashboard.php">
+                        <a class="nav-link <?= $currentPage === 'dashboard' ? 'active' : '' ?>" href="/admin/dashboard.php">
                             <i class="fas fa-tachometer-alt nav-icon"></i>
                             <span class="nav-text">Dashboard</span>
                         </a>
                     </li>
                     <li class="nav-divider"></li>
                     <li class="nav-item">
-                        <a class="nav-link <?= in_array($currentPage, ['settings', 'homepage', 'about']) ? 'active' : '' ?>" href="/Tamim/admin/settings/">
+                        <a class="nav-link <?= in_array($currentPage, ['settings', 'homepage', 'about']) ? 'active' : '' ?>" href="/admin/settings/">
                             <i class="fas fa-cog nav-icon"></i>
                             <span class="nav-text">Website Settings</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?= $currentPage === 'homepage' ? 'active' : '' ?>" href="/Tamim/admin/homepage/">
+                        <a class="nav-link <?= $currentPage === 'homepage' ? 'active' : '' ?>" href="/admin/homepage/">
                             <i class="fas fa-home nav-icon"></i>
                             <span class="nav-text">Homepage</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?= $currentPage === 'about' ? 'active' : '' ?>" href="/Tamim/admin/about/">
+                        <a class="nav-link <?= $currentPage === 'about' ? 'active' : '' ?>" href="/admin/about/">
                             <i class="fas fa-user nav-icon"></i>
                             <span class="nav-text">About</span>
                         </a>
                     </li>
                     <li class="nav-divider"></li>
                     <li class="nav-item">
-                        <a class="nav-link <?= $currentPage === 'skills' ? 'active' : '' ?>" href="/Tamim/admin/skills/">
+                        <a class="nav-link <?= $currentPage === 'skills' ? 'active' : '' ?>" href="/admin/skills/">
                             <i class="fas fa-code-branch nav-icon"></i>
                             <span class="nav-text">Skills</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?= $currentPage === 'services' ? 'active' : '' ?>" href="/Tamim/admin/services/">
+                        <a class="nav-link <?= $currentPage === 'services' ? 'active' : '' ?>" href="/admin/services/">
                             <i class="fas fa-briefcase nav-icon"></i>
                             <span class="nav-text">Services</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?= $currentPage === 'projects' ? 'active' : '' ?>" href="/Tamim/admin/projects/">
+                        <a class="nav-link <?= $currentPage === 'projects' ? 'active' : '' ?>" href="/admin/projects/">
                             <i class="fas fa-folder-open nav-icon"></i>
                             <span class="nav-text">Projects</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?= $currentPage === 'experience' ? 'active' : '' ?>" href="/Tamim/admin/experience/">
+                        <a class="nav-link <?= $currentPage === 'experience' ? 'active' : '' ?>" href="/admin/experience/">
                             <i class="fas fa-briefcase nav-icon"></i>
                             <span class="nav-text">Experience</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?= $currentPage === 'education' ? 'active' : '' ?>" href="/Tamim/admin/education/">
+                        <a class="nav-link <?= $currentPage === 'education' ? 'active' : '' ?>" href="/admin/education/">
                             <i class="fas fa-graduation-cap nav-icon"></i>
                             <span class="nav-text">Education</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?= $currentPage === 'testimonials' ? 'active' : '' ?>" href="/Tamim/admin/testimonials/">
+                        <a class="nav-link <?= $currentPage === 'testimonials' ? 'active' : '' ?>" href="/admin/testimonials/">
                             <i class="fas fa-star nav-icon"></i>
                             <span class="nav-text">Testimonials</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?= $currentPage === 'messages' ? 'active' : '' ?>" href="/Tamim/admin/messages/">
+                        <a class="nav-link <?= $currentPage === 'messages' ? 'active' : '' ?>" href="/admin/messages/">
                             <i class="fas fa-envelope nav-icon"></i>
                             <span class="nav-text">Messages</span>
                             <?php 
@@ -120,7 +120,7 @@ $currentPage = $currentPage ?? '';
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?= $currentPage === 'live-chat' ? 'active' : '' ?>" href="/Tamim/admin/live-chat/">
+                        <a class="nav-link <?= $currentPage === 'live-chat' ? 'active' : '' ?>" href="/admin/live-chat/">
                             <i class="fas fa-comments nav-icon"></i>
                             <span class="nav-text">Live Chat</span>
                             <?php 
@@ -132,7 +132,7 @@ $currentPage = $currentPage ?? '';
                     </li>
                     <li class="nav-divider"></li>
                     <li class="nav-item">
-                        <a class="nav-link <?= $currentPage === 'blog' ? 'active' : '' ?>" href="/Tamim/admin/blog/">
+                        <a class="nav-link <?= $currentPage === 'blog' ? 'active' : '' ?>" href="/admin/blog/">
                             <i class="fas fa-blog nav-icon"></i>
                             <span class="nav-text">Blog</span>
                         </a>
@@ -140,10 +140,10 @@ $currentPage = $currentPage ?? '';
                 </ul>
             </nav>
             <div class="sidebar-footer">
-                <a href="/Tamim/" target="_blank" class="btn btn-outline-primary w-100 mb-2">
+                <a href="/" target="_blank" class="btn btn-outline-primary w-100 mb-2">
                     <i class="fas fa-external-link-alt me-2"></i><span class="d-none d-sm-inline">View Website</span>
                 </a>
-                <a href="/Tamim/admin/logout.php" class="btn btn-outline-danger w-100">
+                <a href="/admin/logout.php" class="btn btn-outline-danger w-100">
                     <i class="fas fa-sign-out-alt me-2"></i><span class="d-none d-sm-inline">Logout</span>
                 </a>
             </div>
@@ -174,10 +174,10 @@ $currentPage = $currentPage ?? '';
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><h6 class="dropdown-header">Account</h6></li>
-                            <li><a class="dropdown-item" href="/Tamim/admin/profile.php"><i class="fas fa-user me-2"></i>Profile</a></li>
-                            <li><a class="dropdown-item" href="/Tamim/admin/change-password.php"><i class="fas fa-key me-2"></i>Change Password</a></li>
+                            <li><a class="dropdown-item" href="/admin/profile.php"><i class="fas fa-user me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="/admin/change-password.php"><i class="fas fa-key me-2"></i>Change Password</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-danger" href="/Tamim/admin/logout.php"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                            <li><a class="dropdown-item text-danger" href="/admin/logout.php"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
                         </ul>
                     </div>
                 </div>

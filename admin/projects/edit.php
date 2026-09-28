@@ -7,7 +7,7 @@
 require_once __DIR__ . '/../../includes/bootstrap.php';
 
 if (!auth_check()) {
-    redirect('/Tamim/admin/login.php');
+    redirect('/admin/login.php');
 }
 
 $isEdit = isset($_GET['id']);
@@ -17,7 +17,7 @@ $categories = db_all('SELECT * FROM project_categories WHERE is_active = 1 ORDER
 if ($isEdit) {
     $project = db_one('SELECT * FROM projects WHERE id = ?', [(int)$_GET['id']]);
     if (!$project) {
-        redirect('/Tamim/admin/projects/', 'Project not found.', 'danger');
+        redirect('/admin/projects/', 'Project not found.', 'danger');
     }
     $pageTitle = 'Edit Project';
 } else {
@@ -150,12 +150,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $sql = 'UPDATE projects SET category_id=?, title=?, slug=?, short_description=?, full_description=?, cover_image=?, gallery_images=?, technologies=?, features=?, challenges=?, solution=?, live_url=?, github_url=?, client_name=?, project_date=?, is_featured=?, is_active=?, sort_order=?, updated_at=NOW() WHERE id=?';
                 $params = [$formData['category_id'], $formData['title'], $formData['slug'], $formData['short_description'], $formData['full_description'], $formData['cover_image'], $galleryJson, $techJson, $featuresJson, $formData['challenges'], $formData['solution'], $formData['live_url'], $formData['github_url'], $formData['client_name'], $formData['project_date'], $formData['is_featured'], $formData['is_active'], $formData['sort_order'], $project['id']];
                 db_execute($sql, $params);
-                redirect('/Tamim/admin/projects/', 'Project updated successfully!');
+                redirect('/admin/projects/', 'Project updated successfully!');
             } else {
                 $sql = 'INSERT INTO projects (category_id, title, slug, short_description, full_description, cover_image, gallery_images, technologies, features, challenges, solution, live_url, github_url, client_name, project_date, is_featured, is_active, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
                 $params = [$formData['category_id'], $formData['title'], $formData['slug'], $formData['short_description'], $formData['full_description'], $formData['cover_image'], $galleryJson, $techJson, $featuresJson, $formData['challenges'], $formData['solution'], $formData['live_url'], $formData['github_url'], $formData['client_name'], $formData['project_date'], $formData['is_featured'], $formData['is_active'], $formData['sort_order']];
                 db_execute($sql, $params);
-                redirect('/Tamim/admin/projects/', 'Project created successfully!');
+                redirect('/admin/projects/', 'Project created successfully!');
             }
         }
     }
@@ -165,7 +165,7 @@ require __DIR__ . '/../../includes/admin_header.php';
 ?>
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="h3 mb-0"><?= e($pageTitle) ?></h1>
-    <a href="/Tamim/admin/projects/" class="btn btn-secondary">
+    <a href="/admin/projects/" class="btn btn-secondary">
         <i class="fas fa-arrow-left me-2"></i>Back to List
     </a>
 </div>
@@ -413,7 +413,7 @@ require __DIR__ . '/../../includes/admin_header.php';
         <button type="submit" class="btn btn-primary">
             <i class="fas fa-save me-2"></i><?= $isEdit ? 'Update' : 'Create' ?> Project
         </button>
-        <a href="/Tamim/admin/projects/" class="btn btn-secondary ms-2">Cancel</a>
+        <a href="/admin/projects/" class="btn btn-secondary ms-2">Cancel</a>
     </div>
 </form>
 

@@ -7,7 +7,7 @@
 require_once __DIR__ . '/../../includes/bootstrap.php';
 
 if (!auth_check()) {
-    redirect('/Tamim/admin/login.php');
+    redirect('/admin/login.php');
 }
 
 $isEdit = isset($_GET['id']);
@@ -16,7 +16,7 @@ $skill = null;
 if ($isEdit) {
     $skill = db_one('SELECT * FROM skills WHERE id = ?', [(int)$_GET['id']]);
     if (!$skill) {
-        redirect('/Tamim/admin/skills/', 'Skill not found.', 'danger');
+        redirect('/admin/skills/', 'Skill not found.', 'danger');
     }
     $pageTitle = 'Edit Skill';
 } else {
@@ -86,12 +86,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $sql = 'UPDATE skills SET name=?, icon_class=?, icon_type=?, icon_image=?, percentage=?, description=?, category=?, is_active=?, sort_order=?, updated_at=NOW() WHERE id=?';
                 $params = [$formData['name'], $formData['icon_class'], $formData['icon_type'], $formData['icon_image'], $formData['percentage'], $formData['description'], $formData['category'], $formData['is_active'], $formData['sort_order'], $skill['id']];
                 db_execute($sql, $params);
-                redirect('/Tamim/admin/skills/', 'Skill updated successfully!');
+                redirect('/admin/skills/', 'Skill updated successfully!');
             } else {
                 $sql = 'INSERT INTO skills (name, icon_class, icon_type, icon_image, percentage, description, category, is_active, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
                 $params = [$formData['name'], $formData['icon_class'], $formData['icon_type'], $formData['icon_image'], $formData['percentage'], $formData['description'], $formData['category'], $formData['is_active'], $formData['sort_order']];
                 db_execute($sql, $params);
-                redirect('/Tamim/admin/skills/', 'Skill created successfully!');
+                redirect('/admin/skills/', 'Skill created successfully!');
             }
         }
     }
@@ -103,7 +103,7 @@ require __DIR__ . '/../../includes/admin_header.php';
 ?>
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="h3 mb-0"><?= e($pageTitle) ?></h1>
-    <a href="/Tamim/admin/skills/" class="btn btn-secondary">
+    <a href="/admin/skills/" class="btn btn-secondary">
         <i class="fas fa-arrow-left me-2"></i>Back to List
     </a>
 </div>
@@ -208,7 +208,7 @@ require __DIR__ . '/../../includes/admin_header.php';
         <button type="submit" class="btn btn-primary">
             <i class="fas fa-save me-2"></i><?= $isEdit ? 'Update' : 'Create' ?> Skill
         </button>
-        <a href="/Tamim/admin/skills/" class="btn btn-secondary ms-2">Cancel</a>
+        <a href="/admin/skills/" class="btn btn-secondary ms-2">Cancel</a>
     </div>
 </form>
 

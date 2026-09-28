@@ -8,7 +8,7 @@ require_once __DIR__ . '/../includes/bootstrap.php';
 
 // Redirect if already logged in
 if (auth_check()) {
-    redirect('/Tamim/admin/dashboard.php');
+    redirect('/admin/dashboard.php');
 }
 
 $errors = [];
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $errors[] = 'Account temporarily locked. Please try again later.';
             } else {
                 auth_login($admin['id'], $remember);
-                redirect('/Tamim/admin/dashboard.php', 'Welcome back, ' . e($admin['full_name'] ?? $admin['username']) . '!');
+                redirect('/admin/dashboard.php', 'Welcome back, ' . e($admin['full_name'] ?? $admin['username']) . '!');
             }
         }
     }

@@ -7,7 +7,7 @@
 require_once __DIR__ . '/../../includes/bootstrap.php';
 
 if (!auth_check()) {
-    redirect('/Tamim/admin/login.php');
+    redirect('/admin/login.php');
 }
 
 $pageTitle = 'Projects';
@@ -20,10 +20,10 @@ require __DIR__ . '/../../includes/admin_header.php';
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="h3 mb-0"><?= e($pageTitle) ?></h1>
     <div class="d-flex gap-2">
-        <a href="/Tamim/admin/project_categories/" class="btn btn-outline-secondary">
+        <a href="/admin/project_categories/" class="btn btn-outline-secondary">
             <i class="fas fa-tags me-2"></i>Categories
         </a>
-        <a href="/Tamim/admin/projects/create.php" class="btn btn-primary">
+        <a href="/admin/projects/create.php" class="btn btn-primary">
             <i class="fas fa-plus me-2"></i>Add Project
         </a>
     </div>
@@ -36,7 +36,7 @@ require __DIR__ . '/../../includes/admin_header.php';
                 <i class="fas fa-folder-open fa-3x text-muted mb-3"></i>
                 <h5 class="text-muted">No projects yet</h5>
                 <p class="text-muted">Add your first project to showcase your work</p>
-                <a href="/Tamim/admin/projects/create.php" class="btn btn-primary mt-2">
+                <a href="/admin/projects/create.php" class="btn btn-primary mt-2">
                     <i class="fas fa-plus me-2"></i>Add Project
                 </a>
             </div>
@@ -90,14 +90,14 @@ require __DIR__ . '/../../includes/admin_header.php';
                                 <td><?= $project['sort_order'] ?></td>
                                 <td>
                                     <div class="btn-group btn-group-sm">
-                                        <a href="/Tamim/admin/projects/edit.php?id=<?= $project['id'] ?>" class="btn btn-outline-primary" title="Edit">
+                                        <a href="/admin/projects/edit.php?id=<?= $project['id'] ?>" class="btn btn-outline-primary" title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <a href="/Tamim/admin/projects/gallery.php?id=<?= $project['id'] ?>" class="btn btn-outline-info" title="Gallery">
+                                        <a href="/admin/projects/gallery.php?id=<?= $project['id'] ?>" class="btn btn-outline-info" title="Gallery">
                                             <i class="fas fa-images"></i>
                                         </a>
                                         <button type="button" class="btn btn-outline-danger" 
-                                                onclick="deleteItem(<?= $project['id'] ?>, '/Tamim/admin/projects/delete.php', 'Are you sure you want to delete this project?')"
+                                                onclick="deleteItem(<?= $project['id'] ?>, '/admin/projects/delete.php', 'Are you sure you want to delete this project?')"
                                                 title="Delete">
                                             <i class="fas fa-trash"></i>
                                         </button>

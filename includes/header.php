@@ -75,7 +75,7 @@ $pageType = $pageType ?? 'website';
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNavbar">
         <div class="container">
             <!-- Logo -->
-            <a class="navbar-brand" href="/Tamim/">
+            <a class="navbar-brand" href="/">
                 <?php if (setting('logo')): ?>
                     <img src="<?= e(setting('site_url', '/Tamim') . '/assets/uploads/settings/' . setting('logo')) ?>" alt="<?= e(setting('site_name')) ?>" style="height: 40px;">
                 <?php else: ?>
@@ -92,33 +92,33 @@ $pageType = $pageType ?? 'website';
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto me-4">
                     <li class="nav-item">
-                        <a class="nav-link" href="/Tamim/#home">Home</a>
+                        <a class="nav-link" href="/#home">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/Tamim/#about">About</a>
+                        <a class="nav-link" href="/#about">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/Tamim/#skills">Skills</a>
+                        <a class="nav-link" href="/#skills">Skills</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/Tamim/#services">Services</a>
+                        <a class="nav-link" href="/#services">Services</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/Tamim/#projects">Projects</a>
+                        <a class="nav-link" href="/#projects">Projects</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/Tamim/#experience">Experience</a>
+                        <a class="nav-link" href="/#experience">Experience</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/Tamim/#testimonials">Testimonials</a>
+                        <a class="nav-link" href="/#testimonials">Testimonials</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/Tamim/#contact">Contact</a>
+                        <a class="nav-link" href="/#contact">Contact</a>
                     </li>
                 </ul>
                 
                 <!-- CTA Button -->
-                <a href="/Tamim/#contact" class="btn btn-primary d-none d-lg-inline-flex">
+                <a href="/#contact" class="btn btn-primary d-none d-lg-inline-flex">
                     <i class="fas fa-comment me-2"></i>Let's Talk
                 </a>
             </div>
