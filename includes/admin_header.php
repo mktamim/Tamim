@@ -119,6 +119,17 @@ $currentPage = $currentPage ?? '';
                             <?php endif; ?>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= $currentPage === 'live-chat' ? 'active' : '' ?>" href="/Tamim/admin/live-chat/">
+                            <i class="fas fa-comments nav-icon"></i>
+                            <span class="nav-text">Live Chat</span>
+                            <?php 
+                            $liveChatWaiting = db_one('SELECT COUNT(*) as c FROM live_chats WHERE status = "waiting"')['c'] ?? 0;
+                            if ($liveChatWaiting > 0): ?>
+                                <span class="badge bg-warning rounded-pill ms-auto"><?= $liveChatWaiting ?></span>
+                            <?php endif; ?>
+                        </a>
+                    </li>
                     <li class="nav-divider"></li>
                     <li class="nav-item">
                         <a class="nav-link <?= $currentPage === 'blog' ? 'active' : '' ?>" href="/Tamim/admin/blog/">

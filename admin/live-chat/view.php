@@ -7,7 +7,7 @@ if (!$id) {
     redirect('/Tamim/admin/live-chat/');
 }
 
-$chat = db_one('SELECT lc.*, a.name as admin_name FROM live_chats lc LEFT JOIN admins a ON lc.assigned_admin_id = a.id WHERE lc.id = ?', [$id]);
+$chat = db_one('SELECT lc.*, a.full_name as admin_name FROM live_chats lc LEFT JOIN admins a ON lc.assigned_admin_id = a.id WHERE lc.id = ?', [$id]);
 if (!$chat) {
     redirect('/Tamim/admin/live-chat/', 'Chat not found', 'danger');
 }
@@ -58,7 +58,7 @@ require __DIR__ . '/../../includes/admin_header.php';
                     </div>
                     <div>
                         <strong><?= e($chat['visitor_name']) ?></strong>
-                        <span class="badge bg-<?= $chat['status'] === 'waiting' ? 'warning' : ($chat['status'] === 'active' ? 'success' : 'secondary') ms-2"><?= ucfirst($chat['status']) ?></span>
+                        <span class="badge bg-<?= $chat['status'] === 'waiting' ? 'warning' : ($chat['status'] === 'active' ? 'success' : 'secondary') ?> ms-2"><?= ucfirst($chat['status']) ?></span>
                     </div>
                 </div>
                 <?php if ($chat['status'] !== 'closed'): ?>
