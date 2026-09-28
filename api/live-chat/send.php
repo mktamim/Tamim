@@ -35,9 +35,9 @@ if ($senderType === 'admin') {
         exit;
     }
     $senderId = $_SESSION['admin_id'];
-    db_execute('UPDATE live_chats SET status = "active", assigned_admin_id = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?', [$senderId, $chat['id']]);
+    db_execute('UPDATE live_chats SET status = "active", assigned_admin_id = ?, last_activity = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP WHERE id = ?', [$senderId, $chat['id']]);
 } else {
-    db_execute('UPDATE live_chats SET status = "active", updated_at = CURRENT_TIMESTAMP WHERE id = ?', [$chat['id']]);
+    db_execute('UPDATE live_chats SET status = "active", last_activity = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP WHERE id = ?', [$chat['id']]);
 }
 
 $messageId = db_execute(

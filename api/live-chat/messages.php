@@ -25,6 +25,12 @@ if (!$chat) {
     exit;
 }
 
+// Check session expiry (5 minutes of inactivity)
+$expiryMinutes = 5;
+$lastActivity = strtotime($chat['last_activity']);
+$now = time();
+$isExpired = ($now - $lastActivity) > ($expiryMinutes * 60);
+
 $messages = db_all(
     'SELECT m.*, a.full_name as admin_name FROM live_chat_messages m LEFT JOIN admins a ON m.sender_id = a.id WHERE m.chat_id = ? AND m.id > ? ORDER BY m.created_at ASC',
     [$chat['id'], $since]
@@ -42,5 +48,8 @@ echo json_encode([
     'chat_id' => $chat['id'],
     'status' => $chat['status'],
     'messages' => $messages,
-    'unread_count' => $unreadCount
+    'unread_count' => $unreadCount,
+    'is_expired' => $isExpired,
+    'expiry_minutes' => $expiryMinutes,
+    'last_activity' => $chat['last_activity']
 ]);

@@ -12,15 +12,19 @@ if (!$chat) {
     redirect('/Tamim/admin/live-chat/', 'Chat not found', 'danger');
 }
 
+// Check if chat is expired (5 minutes inactivity)
+$isExpired = $chat['status'] !== 'closed' && (time() - strtotime($chat['last_activity'])) >= 300;
+
 // Mark visitor messages as read
 db_execute('UPDATE live_chat_messages SET is_read = TRUE WHERE chat_id = ? AND sender_type = "visitor"', [$chat['id']]);
 
 // Assign to current admin if unassigned
 if ($chat['status'] === 'waiting' && !$chat['assigned_admin_id']) {
-    db_execute('UPDATE live_chats SET assigned_admin_id = ?, status = "active", updated_at = CURRENT_TIMESTAMP WHERE id = ?', [$_SESSION['admin_id'], $chat['id']]);
+    db_execute('UPDATE live_chats SET assigned_admin_id = ?, status = "active", updated_at = CURRENT_TIMESTAMP, last_activity = CURRENT_TIMESTAMP WHERE id = ?', [$_SESSION['admin_id'], $chat['id']]);
     $chat['assigned_admin_id'] = $_SESSION['admin_id'];
     $chat['status'] = 'active';
     $chat['admin_name'] = $_SESSION['admin_name'] ?? 'Admin';
+    $isExpired = false;
 }
 
 $messages = db_all(
@@ -58,7 +62,11 @@ require __DIR__ . '/../../includes/admin_header.php';
                     </div>
                     <div>
                         <strong><?= e($chat['visitor_name']) ?></strong>
-                        <span class="badge bg-<?= $chat['status'] === 'waiting' ? 'warning' : ($chat['status'] === 'active' ? 'success' : 'secondary') ?> ms-2"><?= ucfirst($chat['status']) ?></span>
+                        <?php if ($isExpired): ?>
+                            <span class="badge bg-danger ms-2">Expired</span>
+                        <?php else: ?>
+                            <span class="badge bg-<?= $chat['status'] === 'waiting' ? 'warning' : ($chat['status'] === 'active' ? 'success' : 'secondary') ?> ms-2"><?= ucfirst($chat['status']) ?></span>
+                        <?php endif; ?>
                     </div>
                 </div>
                 <?php if ($chat['status'] !== 'closed'): ?>
@@ -119,10 +127,16 @@ require __DIR__ . '/../../includes/admin_header.php';
                     <tr><th style="width: 120px;">Name</th><td><?= e($chat['visitor_name']) ?></td></tr>
                     <tr><th>Email</th><td><?= e($chat['visitor_email'] ?: 'Not provided') ?></td></tr>
                     <tr><th>IP Address</th><td><?= e($chat['visitor_ip']) ?></td></tr>
-                    <tr><th>Status</th><td><span class="badge bg-<?= $chat['status'] === 'waiting' ? 'warning' : ($chat['status'] === 'active' ? 'success' : 'secondary') ?>"><?= ucfirst($chat['status']) ?></span></td></tr>
+                    <tr><th>Status</th><td>
+                        <?php if ($isExpired): ?>
+                            <span class="badge bg-danger">Expired</span>
+                        <?php else: ?>
+                            <span class="badge bg-<?= $chat['status'] === 'waiting' ? 'warning' : ($chat['status'] === 'active' ? 'success' : 'secondary') ?>"><?= ucfirst($chat['status']) ?></span>
+                        <?php endif; ?>
+                    </td></tr>
                     <tr><th>Assigned To</th><td><?= $chat['admin_name'] ? e($chat['admin_name']) : 'Unassigned' ?></td></tr>
                     <tr><th>Started</th><td><?= format_date($chat['created_at'], 'M d, Y H:i') ?></td></tr>
-                    <tr><th>Last Active</th><td><?= format_date($chat['updated_at'], 'M d, Y H:i') ?></td></tr>
+                    <tr><th>Last Active</th><td><?= format_date($chat['last_activity'], 'M d, Y H:i') ?></td></tr>
                 </table>
             </div>
         </div>
@@ -131,7 +145,14 @@ require __DIR__ . '/../../includes/admin_header.php';
             <div class="card-header">Quick Actions</div>
             <div class="card-body">
                 <div class="d-grid gap-2">
-                    <?php if ($chat['status'] === 'waiting'): ?>
+                    <?php if ($isExpired): ?>
+                        <form action="/Tamim/admin/live-chat/assign.php" method="POST">
+                            <?= csrf_field() ?>
+                            <input type="hidden" name="id" value="<?= $chat['id'] ?>">
+                            <input type="hidden" name="admin_id" value="<?= $_SESSION['admin_id'] ?>">
+                            <button type="submit" class="btn btn-warning">Re-activate Chat</button>
+                        </form>
+                    <?php elseif ($chat['status'] === 'waiting'): ?>
                         <form action="/Tamim/admin/live-chat/assign.php" method="POST">
                             <?= csrf_field() ?>
                             <input type="hidden" name="id" value="<?= $chat['id'] ?>">
@@ -170,7 +191,7 @@ document.getElementById('adminChatForm')?.addEventListener('submit', async funct
         const formData = new FormData(form);
         formData.append('sender_type', 'admin');
         
-        const response = await fetch('/Tamim/api/live-chat/send.php', {
+        const response = await fetch('/Tamim/api/live-chat/send', {
             method: 'POST',
             body: formData
         });

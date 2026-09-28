@@ -6,8 +6,8 @@
 
 return [
     'host' => 'localhost',
-    'dbname' => 'portfolio_db',
-    'username' => 'root',
+    'dbname' => 'traveleyeba_db',
+    'username' => 'traveleyeba_traveleyeba',
     'password' => '',
     'charset' => 'utf8mb4',
     'options' => [

@@ -14,8 +14,12 @@ $where = '';
 $params = [];
 
 if ($status !== 'all') {
-    $where = 'WHERE lc.status = ?';
-    $params[] = $status;
+    if ($status === 'expired') {
+        $where = 'WHERE lc.status IN ("waiting","active") AND TIMESTAMPDIFF(MINUTE, lc.last_activity, NOW()) >= 5';
+    } else {
+        $where = 'WHERE lc.status = ?';
+        $params[] = $status;
+    }
 }
 
 $total = db_one('SELECT COUNT(*) as cnt FROM live_chats lc ' . $where, $params)['cnt'];
@@ -24,7 +28,8 @@ $chats = db_all(
         (SELECT COUNT(*) FROM live_chat_messages WHERE chat_id = lc.id AND sender_type = "visitor" AND is_read = FALSE) as unread_visitor,
         (SELECT COUNT(*) FROM live_chat_messages WHERE chat_id = lc.id AND sender_type = "admin" AND is_read = FALSE) as unread_admin,
         (SELECT message FROM live_chat_messages WHERE chat_id = lc.id ORDER BY created_at DESC LIMIT 1) as last_message,
-        (SELECT created_at FROM live_chat_messages WHERE chat_id = lc.id ORDER BY created_at DESC LIMIT 1) as last_message_time
+        (SELECT created_at FROM live_chat_messages WHERE chat_id = lc.id ORDER BY created_at DESC LIMIT 1) as last_message_time,
+        TIMESTAMPDIFF(MINUTE, lc.last_activity, NOW()) as inactive_minutes
     FROM live_chats lc
     LEFT JOIN admins a ON lc.assigned_admin_id = a.id
     ' . $where . '
@@ -39,6 +44,7 @@ $stats = [
     'waiting' => db_one('SELECT COUNT(*) as cnt FROM live_chats WHERE status = "waiting"')['cnt'],
     'active' => db_one('SELECT COUNT(*) as cnt FROM live_chats WHERE status = "active"')['cnt'],
     'closed' => db_one('SELECT COUNT(*) as cnt FROM live_chats WHERE status = "closed"')['cnt'],
+    'expired' => db_one('SELECT COUNT(*) as cnt FROM live_chats WHERE status IN ("waiting","active") AND TIMESTAMPDIFF(MINUTE, last_activity, NOW()) >= 5')['cnt'],
 ];
 
 require __DIR__ . '/../../includes/admin_header.php';
@@ -50,6 +56,7 @@ require __DIR__ . '/../../includes/admin_header.php';
         <a href="/Tamim/admin/live-chat/" class="btn btn-outline-primary">All</a>
         <a href="/Tamim/admin/live-chat/?status=waiting" class="btn btn-outline-warning">Waiting (<?= $stats['waiting'] ?>)</a>
         <a href="/Tamim/admin/live-chat/?status=active" class="btn btn-outline-primary">Active (<?= $stats['active'] ?>)</a>
+        <a href="/Tamim/admin/live-chat/?status=expired" class="btn btn-outline-danger">Expired (<?= $stats['expired'] ?>)</a>
         <a href="/Tamim/admin/live-chat/?status=closed" class="btn btn-outline-secondary">Closed (<?= $stats['closed'] ?>)</a>
     </div>
 </div>
@@ -78,28 +85,37 @@ require __DIR__ . '/../../includes/admin_header.php';
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($chats as $chat): ?>
-                            <tr class="<?= $chat['unread_visitor'] > 0 ? 'table-warning' : '' ?>">
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <div class="avatar-circle bg-primary text-white me-2">
-                                            <?= strtoupper(substr($chat['visitor_name'], 0, 1)) ?>
-                                        </div>
-                                        <div>
-                                            <strong><?= e($chat['visitor_name']) ?></strong>
-                                            <br>
-                                            <small class="text-muted"><?= e($chat['visitor_email'] ?: 'No email') ?></small>
-                                            <?php if ($chat['unread_visitor'] > 0): ?>
-                                                <span class="badge bg-warning ms-2"><?= $chat['unread_visitor'] ?> new</span>
-                                            <?php endif; ?>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="badge bg-<?= $chat['status'] === 'waiting' ? 'warning' : ($chat['status'] === 'active' ? 'success' : 'secondary') ?>">
-                                        <?= ucfirst($chat['status']) ?>
-                                    </span>
-                                </td>
+                        <?php foreach ($chats as $chat):
+                    $isExpired = $chat['inactive_minutes'] >= 5 && in_array($chat['status'], ['waiting', 'active']);
+                ?>
+                    <tr class="<?= $chat['unread_visitor'] > 0 ? 'table-warning' : '' ?><?= $isExpired ? ' table-danger' : '' ?>">
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle bg-primary text-white me-2">
+                                    <?= strtoupper(substr($chat['visitor_name'], 0, 1)) ?>
+                                </div>
+                                <div>
+                                    <strong><?= e($chat['visitor_name']) ?></strong>
+                                    <br>
+                                    <small class="text-muted"><?= e($chat['visitor_email'] ?: 'No email') ?></small>
+                                    <?php if ($chat['unread_visitor'] > 0): ?>
+                                        <span class="badge bg-warning ms-2"><?= $chat['unread_visitor'] ?> new</span>
+                                    <?php endif; ?>
+                                    <?php if ($isExpired): ?>
+                                        <span class="badge bg-danger ms-2">Expired</span>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <?php if ($isExpired): ?>
+                                <span class="badge bg-danger">Expired</span>
+                            <?php else: ?>
+                                <span class="badge bg-<?= $chat['status'] === 'waiting' ? 'warning' : ($chat['status'] === 'active' ? 'success' : 'secondary') ?>">
+                                    <?= ucfirst($chat['status']) ?>
+                                </span>
+                            <?php endif; ?>
+                        </td>
                                 <td>
                                     <?= $chat['admin_name'] ? e($chat['admin_name']) : '<span class="text-muted">Unassigned</span>' ?>
                                 </td>

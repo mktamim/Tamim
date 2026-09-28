@@ -17,7 +17,7 @@
                             <span class="fw-bold fs-3" style="color: var(--primary-color);"><?= e(setting('developer_name', 'Developer')) ?></span>
                         <?php endif; ?>
                     </div>
-                    <p class="text-muted"><?= e(setting('about_short_intro', 'Professional web developer creating modern, fast, and scalable web applications.')) ?></p>
+                    <p class="text-white"><?= e(setting('about_short_intro', 'Professional web developer creating modern, fast, and scalable web applications.')) ?></p>
                     
                     <!-- Social Links -->
                     <div class="social-links mt-4">
@@ -82,11 +82,11 @@
                 <div class="col-12">
                     <hr class="footer-divider">
                     <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
-                        <p class="mb-0 text-muted small">
+                        <p class="mb-0 text-white small">
                             &copy; <?= date('Y') ?> <?= e(setting('developer_name', 'Developer')) ?>. All Rights Reserved.
                         </p>
-                        <p class="mb-0 text-muted small">
-                            Built with <i class="fas fa-heart text-danger"></i> using PHP & MySQL
+                        <p class="mb-0 text-white small">
+                            Design & Development by Tamim iqbal
                         </p>
                     </div>
                 </div>

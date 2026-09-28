@@ -13,21 +13,26 @@ $pageUrl = current_url();
     <!-- Chat Window -->
     <div id="liveChatWindow" class="live-chat-window" style="display: none;">
         <div class="live-chat-header">
-            <div class="d-flex align-items-center">
+            <div class="header-left d-flex align-items-center">
                 <div class="avatar-circle bg-primary text-white me-2">
                     <i class="fas fa-headset"></i>
                 </div>
-                <div>
+                <div class="header-text">
                     <strong>Live Support</strong>
                     <small class="d-block text-white-50" id="liveChatStatus">Click to start chat</small>
                 </div>
             </div>
-            <button class="btn-close btn-close-white" id="liveChatClose" aria-label="Close chat"></button>
+            <div class="header-right d-flex gap-1">
+                <button class="btn btn-sm btn-outline-light" id="liveChatEnd" aria-label="End chat" style="display: none;">
+                    <i class="fas fa-times"></i>
+                </button>
+                <button class="btn-close btn-close-white" id="liveChatClose" aria-label="Close chat"></button>
+            </div>
         </div>
 
         <div class="live-chat-body" id="liveChatBody">
             <!-- Pre-chat Form -->
-            <div id="liveChatPreForm" class="p-3">
+            <div id="liveChatPreForm" class="p-3" style="overflow-y: auto; max-height: 100%;">
                 <h5 class="mb-3">Start a Conversation</h5>
                 <form id="liveChatForm">
                     <?= csrf_field() ?>
@@ -42,9 +47,9 @@ $pageUrl = current_url();
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Message <span class="text-danger">*</span></label>
-                        <textarea name="message" class="form-control" rows="3" required placeholder="How can we help you?"></textarea>
+                        <textarea name="message" class="form-control" rows="2" required placeholder="How can we help you?" style="min-height: 80px; max-height: 120px;"></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary w-100">
+                    <button type="submit" class="btn btn-primary w-100" style="padding: 14px 24px; font-size: 16px;">
                         <i class="fas fa-paper-plane me-1"></i>Start Chat
                     </button>
                 </form>
@@ -62,11 +67,11 @@ $pageUrl = current_url();
 
             <!-- Chat Input -->
             <div id="liveChatInputArea" style="display: none;" class="p-3 border-top">
-                <form id="liveChatSendForm" class="d-flex gap-2">
+                <form id="liveChatSendForm">
                     <?= csrf_field() ?>
                     <input type="hidden" name="sender_type" value="visitor">
                     <input type="text" name="message" class="form-control" placeholder="Type a message..." required autocomplete="off">
-                    <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i></button>
+                    <button type="submit" class="btn btn-primary" aria-label="Send message"><i class="fas fa-paper-plane"></i></button>
                 </form>
             </div>
         </div>
@@ -150,21 +155,86 @@ $pageUrl = current_url();
 }
 
 .live-chat-header {
-    padding: 16px 20px;
+    padding: 14px 16px;
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-shrink: 0;
+}
+
+.live-chat-header .header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.live-chat-header .header-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.live-chat-header .avatar-circle {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.live-chat-header .header-text {
+    min-width: 0;
+}
+
+.live-chat-header strong {
+    font-size: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.live-chat-header #liveChatStatus {
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.live-chat-header .btn-close,
+.live-chat-header #liveChatEnd {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .live-chat-header .btn-close {
-    opacity: 0.8;
-    transition: opacity 0.2s;
+    font-size: 14px;
+    opacity: 0.9;
 }
 
 .live-chat-header .btn-close:hover {
     opacity: 1;
+}
+
+.live-chat-header #liveChatEnd {
+    font-size: 12px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+}
+
+.live-chat-header #liveChatEnd:hover {
+    background: rgba(255,255,255,0.3);
 }
 
 .live-chat-body {
@@ -172,6 +242,7 @@ $pageUrl = current_url();
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    min-height: 0;
 }
 
 .chat-messages {
@@ -226,23 +297,34 @@ $pageUrl = current_url();
     padding: 16px;
     border-top: 1px solid var(--border-color);
     background: var(--light-color);
+    flex-shrink: 0;
 }
 
-.live-chat-input-area .form-control {
-    border-radius: 24px;
-    padding: 10px 16px;
+#liveChatSendForm {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+#liveChatSendForm .form-control {
+    flex: 1 1 auto;
+    min-width: 0;
+    width: auto !important;
+    border-radius: 10px;
+    padding: 12px 16px;
     border: 1px solid var(--border-color);
 }
 
-.live-chat-input-area .btn {
-    border-radius: 24px;
-    padding: 10px 20px;
-}
-
-#liveChatForm .form-control,
-#liveChatSendForm .form-control {
-    border-radius: 10px;
-    padding: 12px 16px;
+#liveChatSendForm .btn {
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: none;
 }
 
 @media (max-width: 480px) {
@@ -256,6 +338,27 @@ $pageUrl = current_url();
     #liveChatWidget {
         bottom: 16px;
         left: 16px;
+    }
+    
+    #liveChatSendForm {
+        gap: 8px;
+        padding: 12px;
+    }
+    
+    #liveChatSendForm .form-control {
+        padding: 12px 16px;
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+    
+    #liveChatSendForm .btn {
+        flex: 0 0 40px;
+        width: 40px;
+        height: 40px;
+    }
+    
+    #liveChatForm .btn {
+        padding: 14px 24px;
+        font-size: 16px; /* Prevents zoom on iOS */
     }
 }
 </style>
@@ -271,6 +374,7 @@ $pageUrl = current_url();
     const btn = document.getElementById('liveChatBtn');
     const windowEl = document.getElementById('liveChatWindow');
     const closeBtn = document.getElementById('liveChatClose');
+    const endBtn = document.getElementById('liveChatEnd');
     const preForm = document.getElementById('liveChatPreForm');
     const messagesDiv = document.getElementById('liveChatMessages');
     const messagesList = document.getElementById('chatMessagesList');
@@ -283,6 +387,7 @@ $pageUrl = current_url();
     // Toggle chat window
     btn?.addEventListener('click', toggleChat);
     closeBtn?.addEventListener('click', closeChat);
+    endBtn?.addEventListener('click', endChat);
     
     function toggleChat() {
         if (isOpen) {
@@ -305,6 +410,43 @@ $pageUrl = current_url();
         windowEl.style.display = 'none';
         btn.style.display = 'flex';
         stopPolling();
+    }
+    
+    async function endChat() {
+        if (!chatId) {
+            closeChat();
+            return;
+        }
+        
+        if (!confirm('Are you sure you want to end this chat?')) {
+            return;
+        }
+        
+        try {
+            const formData = new FormData();
+            formData.append('chat_id', chatId);
+            formData.append('csrf_token', document.querySelector('input[name="csrf_token"]').value);
+            
+            await fetch('/Tamim/api/live-chat/close', {
+                method: 'POST',
+                body: formData
+            });
+        } catch (err) {
+            console.error('End chat error:', err);
+        }
+        
+        // Reset to pre-form state
+        resetToPreForm();
+        closeChat();
+    }
+    
+    function resetToPreForm() {
+        chatId = null;
+        lastMessageId = 0;
+        messagesList.innerHTML = '<div class="text-center text-muted py-3" id="chatEmptyState"><i class="fas fa-comments fa-2x mb-2"></i><p>Connecting...</p></div>';
+        showPreForm();
+        statusEl.textContent = 'Click to start chat';
+        endBtn.style.display = 'none';
     }
     
     // Load existing chat or show pre-form
@@ -339,12 +481,14 @@ $pageUrl = current_url();
         preForm.style.display = 'block';
         messagesDiv.style.display = 'none';
         inputArea.style.display = 'none';
+        endBtn.style.display = 'none';
     }
     
     function showChatInterface() {
         preForm.style.display = 'none';
         messagesDiv.style.display = 'block';
         inputArea.style.display = 'block';
+        endBtn.style.display = 'flex';
     }
     
     function renderMessages(messages) {
@@ -459,7 +603,7 @@ $pageUrl = current_url();
         formData.append('sender_type', 'visitor');
         
         try {
-            const response = await fetch('/Tamim/api/live-chat/send.php', {
+            const response = await fetch('/Tamim/api/live-chat/send', {
                 method: 'POST',
                 body: formData
             });
@@ -494,22 +638,63 @@ $pageUrl = current_url();
             const response = await fetch(`/Tamim/api/live-chat/messages?since=${lastMessageId}`);
             const data = await response.json();
             
-            if (data.success && data.messages && data.messages.length > 0) {
-                const newMessages = data.messages.filter(m => m.id > lastMessageId);
-                newMessages.forEach(msg => appendMessage(msg));
-                lastMessageId = data.messages[data.messages.length - 1]?.id || lastMessageId;
-                
-                // Mark as read if window is focused
-                if (document.hasFocus() && newMessages.some(m => m.sender_type === 'admin')) {
-                    markAsRead(newMessages.filter(m => m.sender_type === 'admin').map(m => m.id));
+            if (data.success) {
+                // Check for session expiry
+                if (data.is_expired) {
+                    stopPolling();
+                    showExpiredNotice(data.expiry_minutes);
+                    return;
                 }
                 
-                updateUnreadBadge(data.unread_count || 0);
-                statusEl.textContent = data.status === 'active' ? 'Agent online' : 'Waiting for agent...';
+                if (data.messages && data.messages.length > 0) {
+                    const newMessages = data.messages.filter(m => m.id > lastMessageId);
+                    newMessages.forEach(msg => appendMessage(msg));
+                    lastMessageId = data.messages[data.messages.length - 1]?.id || lastMessageId;
+                    
+                    // Mark as read if window is focused
+                    if (document.hasFocus() && newMessages.some(m => m.sender_type === 'admin')) {
+                        markAsRead(newMessages.filter(m => m.sender_type === 'admin').map(m => m.id));
+                    }
+                    
+                    updateUnreadBadge(data.unread_count || 0);
+                    statusEl.textContent = data.status === 'active' ? 'Agent online' : 'Waiting for agent...';
+                }
             }
         } catch (err) {
             console.error('Poll error:', err);
         }
+    }
+    
+    function showExpiredNotice(minutes) {
+        const emptyState = document.getElementById('chatEmptyState');
+        if (emptyState) emptyState.remove();
+        
+        const noticeDiv = document.createElement('div');
+        noticeDiv.className = 'chat-message visitor';
+        noticeDiv.style.background = '#fff3cd';
+        noticeDiv.style.border = '1px solid #ffc107';
+        noticeDiv.style.color = '#856404';
+        noticeDiv.innerHTML = `
+            <div class="sender">System</div>
+            <div class="text">No response from support for ${minutes} minutes. This chat session has expired. Please start a new conversation if you need further assistance.</div>
+            <div class="time">${new Date().toLocaleTimeString()}</div>
+        `;
+        messagesList.appendChild(noticeDiv);
+        scrollToBottom();
+        
+        // Disable input
+        const input = document.querySelector('#liveChatSendForm input[name="message"]');
+        const sendBtn = document.querySelector('#liveChatSendForm button[type="submit"]');
+        if (input) input.disabled = true;
+        if (sendBtn) sendBtn.disabled = true;
+        
+        statusEl.textContent = 'Session expired';
+        endBtn.style.display = 'none';
+        
+        // Auto reset to pre-form after 5 seconds
+        setTimeout(() => {
+            resetToPreForm();
+        }, 5000);
     }
     
     async function markAsRead(messageIds) {
