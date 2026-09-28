@@ -1,8 +1,8 @@
 -- Database Schema for Personal Portfolio Website
 -- Run this in MySQL/MariaDB
 
-CREATE DATABASE IF NOT EXISTS `traveleyeba_db` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE `traveleyeba_db`;
+CREATE DATABASE IF NOT EXISTS `portfolio_db` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE `portfolio_db`;
 
 -- Table: admins
 CREATE TABLE `admins` (

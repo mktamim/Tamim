@@ -2,12 +2,14 @@
 # Enable rewrite engine
 RewriteEngine On
 
-# Set base path (adjust if your site is in a subdirectory)
-RewriteBase /Tamim/
+# Set base path - CHANGE THIS FOR YOUR DEPLOYMENT:
+# - For subdirectory (localhost/Tamim/): RewriteBase /Tamim/
+# - For root domain (traveleyebangla.com): RewriteBase /
+RewriteBase /
 
 # Force HTTPS (uncomment if you have SSL)
-# RewriteCond %{HTTPS} off
-# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
 # Force www or non-www (choose one)
 # RewriteCond %{HTTP_HOST} ^www\. [NC]
@@ -64,6 +66,13 @@ RewriteRule ^admin/blog/?$ admin/blog/index.php [L,QSA]
 RewriteRule ^admin/blog/create/?$ admin/blog/create.php [L,QSA]
 RewriteRule ^admin/blog/edit/([0-9]+)/?$ admin/blog/edit.php?id=$1 [L,QSA]
 
+# Handle API routes (extensionless)
+RewriteRule ^api/live-chat/init/?$ api/live-chat/init.php [L,QSA]
+RewriteRule ^api/live-chat/send/?$ api/live-chat/send.php [L,QSA]
+RewriteRule ^api/live-chat/messages/?$ api/live-chat/messages.php [L,QSA]
+RewriteRule ^api/live-chat/read/?$ api/live-chat/read.php [L,QSA]
+RewriteRule ^api/live-chat/close/?$ api/live-chat/close.php [L,QSA]
+
 # Internally rewrite clean URLs to PHP files
 # Check if file exists with .php extension
 RewriteCond %{REQUEST_FILENAME} !-f
@@ -72,7 +81,7 @@ RewriteCond %{REQUEST_FILENAME}.php -f
 RewriteRule ^(.+)$ $1.php [L]
 
 # Handle 404 for non-existent pages
-ErrorDocument 404 /Tamim/404.php
+ErrorDocument 404 /404.php
 
 # Security Headers
 <IfModule mod_headers.c>
