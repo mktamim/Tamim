@@ -452,7 +452,9 @@ $pageUrl = current_url();
     // Load existing chat or show pre-form
     async function loadChat() {
         try {
-            const response = await fetch('/api/live-chat/messages');
+            const response = await fetch('/api/live-chat/messages', {
+                credentials: 'include'
+            });
             const data = await response.json();
             
             if (data.success && data.chat_id) {
@@ -555,6 +557,7 @@ $pageUrl = current_url();
             // First initialize chat
             const initResponse = await fetch('/api/live-chat/init', {
                 method: 'POST',
+                credentials: 'include',
                 body: new FormData(form)
             });
             const initData = await initResponse.json();
@@ -573,6 +576,7 @@ $pageUrl = current_url();
             
             const sendResponse = await fetch('/api/live-chat/send', {
                 method: 'POST',
+                credentials: 'include',
                 body: formData
             });
             const sendData = await sendResponse.json();
@@ -635,7 +639,9 @@ $pageUrl = current_url();
         if (!chatId) return;
         
         try {
-            const response = await fetch(`/api/live-chat/messages?since=${lastMessageId}`);
+            const response = await fetch(`/api/live-chat/messages?since=${lastMessageId}`, {
+                credentials: 'include'
+            });
             const data = await response.json();
             
             if (data.success) {
