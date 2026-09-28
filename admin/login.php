@@ -49,8 +49,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $pageTitle = 'Admin Login';
-require __DIR__ . '/../includes/admin_header.php';
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title><?= e($pageTitle) ?> | Admin Panel</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <!-- Custom Admin CSS -->
+    <link href="<?= asset('css/admin.css') ?>" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: <?= e(setting('primary_color', '#2563eb')) ?>;
+            --secondary-color: <?= e(setting('secondary_color', '#0ea5e9')) ?>;
+        }
+    </style>
+</head>
+<body>
 <div class="admin-login-page">
     <div class="admin-login-container">
         <div class="admin-login-card">
@@ -185,4 +207,8 @@ require __DIR__ . '/../includes/admin_header.php';
     border-top: 1px solid #f3f4f6;
 }
 </style>
-<?php require __DIR__ . '/../includes/admin_footer.php'; ?>
+
+<!-- Bootstrap 5 JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
