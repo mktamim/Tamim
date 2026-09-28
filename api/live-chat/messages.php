@@ -13,12 +13,20 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     exit;
 }
 
+// DEBUG
+$debugInfo = [
+    'cookie_received' => isset($_COOKIE['live_chat_session']),
+    'cookie_value' => $_COOKIE['live_chat_session'] ?? 'NOT_SET',
+    'all_cookies' => array_keys($_COOKIE),
+    'raw_cookie_header' => $_SERVER['HTTP_COOKIE'] ?? 'NOT_SET'
+];
+
 $sessionId = $_COOKIE['live_chat_session'] ?? null;
 $since = isset($_GET['since']) ? (int)$_GET['since'] : 0;
 
 if (!$sessionId) {
     http_response_code(400);
-    echo json_encode(['success' => false, 'message' => 'No session']);
+    echo json_encode(['success' => false, 'message' => 'No session', 'debug' => $debugInfo]);
     exit;
 }
 
@@ -55,5 +63,6 @@ echo json_encode([
     'unread_count' => $unreadCount,
     'is_expired' => $isExpired,
     'expiry_minutes' => $expiryMinutes,
-    'last_activity' => $chat['last_activity']
+    'last_activity' => $chat['last_activity'],
+    'debug' => $debugInfo
 ]);
