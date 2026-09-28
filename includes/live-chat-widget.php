@@ -429,6 +429,7 @@ $pageUrl = current_url();
             
             await fetch('/api/live-chat/close', {
                 method: 'POST',
+                credentials: 'include',
                 body: formData
             });
         } catch (err) {
@@ -609,6 +610,7 @@ $pageUrl = current_url();
         try {
             const response = await fetch('/api/live-chat/send', {
                 method: 'POST',
+                credentials: 'include',
                 body: formData
             });
             const data = await response.json();
