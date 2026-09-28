@@ -97,7 +97,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$categories = ['technical' => 'Technical', 'frontend' => 'Frontend', 'backend' => 'Backend', 'tools' => 'Tools', 'cms' => 'CMS', 'other' => 'Other'];
+$categories = [
+    'frontend' => 'Frontend',
+    'backend' => 'Backend',
+    'networking' => 'Networking',
+    'devops' => 'DevOps & Tools',
+    'database' => 'Database',
+    'technical' => 'Technical',
+    'tools' => 'Tools',
+    'cms' => 'CMS',
+    'other' => 'Other'
+];
 
 require __DIR__ . '/../../includes/admin_header.php';
 ?>

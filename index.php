@@ -166,7 +166,13 @@ require __DIR__ . '/includes/header.php';
         
         <div class="row g-4">
             <?php 
-            $skillCategories = ['frontend' => 'Frontend', 'backend' => 'Backend', 'tools' => 'Tools', 'cms' => 'CMS', 'other' => 'Other'];
+            // Only 3 main categories
+            $mainCategories = [
+                'frontend' => ['label' => 'Frontend Skills', 'icon' => 'fas fa-laptop-code'],
+                'backend' => ['label' => 'Backend Skills', 'icon' => 'fas fa-server'],
+                'networking' => ['label' => 'Networking Skills', 'icon' => 'fas fa-network-wired'],
+            ];
+            
             $allSkills = skills();
             $categorizedSkills = [];
             foreach ($allSkills as $skill) {
@@ -176,16 +182,16 @@ require __DIR__ . '/includes/header.php';
             }
             
             $index = 0;
-            foreach ($skillCategories as $catKey => $catLabel):
+            foreach ($mainCategories as $catKey => $catInfo):
                 $catSkills = $categorizedSkills[$catKey] ?? [];
                 if (empty($catSkills)) continue;
             ?>
-                <div class="col-lg-6 fade-in" style="transition-delay: <?= $index * 0.1 ?>s;">
-                    <h4 class="mb-4"><?= $catLabel ?> Skills</h4>
+                <div class="col-12 fade-in" style="transition-delay: <?= $index * 0.1 ?>s;">
+                    <h4 class="mb-4 text-center"><i class="<?= $catInfo['icon'] ?> me-2"></i><?= $catInfo['label'] ?></h4>
                     <div class="row g-4">
                         <?php foreach ($catSkills as $skill): ?>
-                            <div class="col-md-6">
-                                <div class="skill-card">
+                            <div class="col-4 col-sm-6">
+                                <div class="skill-card h-100">
                                     <div class="skill-icon">
                                         <?php if ($skill['icon_type'] === 'image' && $skill['icon_image']): ?>
                                             <img src="<?= e(setting('site_url', '/Tamim') . '/assets/uploads/skills/' . $skill['icon_image']) ?>" alt="" style="width: 40px; height: 40px;">
@@ -193,9 +199,9 @@ require __DIR__ . '/includes/header.php';
                                             <i class="<?= e($skill['icon_class'] ?? 'fas fa-code') ?>"></i>
                                         <?php endif; ?>
                                     </div>
-                                    <h4><?= e($skill['name']) ?></h4>
+                                    <h5><?= e($skill['name']) ?></h5>
                                     <?php if ($skill['description']): ?>
-                                        <p><?= e($skill['description']) ?></p>
+                                        <p class="small"><?= e($skill['description']) ?></p>
                                     <?php endif; ?>
                                     <div class="skill-progress">
                                         <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="<?= (int)$skill['percentage'] ?>" aria-valuemin="0" aria-valuemax="100"></div>
