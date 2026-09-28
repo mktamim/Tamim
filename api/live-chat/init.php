@@ -9,6 +9,13 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
+// DEBUG - return cookie info in response
+$debugInfo = [
+    'cookie_received' => isset($_COOKIE['live_chat_session']),
+    'cookie_value' => $_COOKIE['live_chat_session'] ?? 'NOT_SET',
+    'all_cookies' => array_keys($_COOKIE)
+];
+
 // Get or create session
 $sessionId = $_COOKIE['live_chat_session'] ?? null;
 $visitorName = trim($_POST['name'] ?? 'Visitor');
@@ -16,7 +23,15 @@ $visitorEmail = trim($_POST['email'] ?? '');
 
 if (!$sessionId) {
     $sessionId = bin2hex(random_bytes(32));
-    setcookie('live_chat_session', $sessionId, time() + 86400 * 30, '/', '', false, true);
+    $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+    setcookie('live_chat_session', $sessionId, [
+        'expires' => time() + 86400 * 30,
+        'path' => '/',
+        'domain' => '',
+        'secure' => $isHttps,
+        'httponly' => true,
+        'samesite' => 'Lax'
+    ]);
 }
 
 // Check existing chat
@@ -39,5 +54,6 @@ echo json_encode([
     'success' => true,
     'chat_id' => $chatId,
     'session_id' => $sessionId,
-    'status' => $chat['status'] ?? 'waiting'
+    'status' => $chat['status'] ?? 'waiting',
+    'debug' => $debugInfo
 ]);
