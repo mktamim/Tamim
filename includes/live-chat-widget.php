@@ -715,6 +715,7 @@ $pageUrl = current_url();
             
             await fetch('/api/live-chat/read', {
                 method: 'POST',
+                credentials: 'include',
                 body: formData
             });
         } catch (err) {
