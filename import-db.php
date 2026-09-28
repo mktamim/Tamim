@@ -22,6 +22,12 @@ if (!$sql) {
     die('<div style="color:red">❌ Could not read database.sql</div>');
 }
 
+// Get DB name from .env and replace in SQL
+$env = parse_ini_file(__DIR__ . '/.env', true);
+$dbName = $env['DB_NAME'] ?? 'traveleyeba_db';
+$sql = str_replace('`portfolio_db`', '`' . $dbName . '`', $sql);
+$sql = str_replace('portfolio_db', $dbName, $sql);
+
 // Split by semicolon (simple approach)
 $statements = array_filter(array_map('trim', explode(';', $sql)));
 
