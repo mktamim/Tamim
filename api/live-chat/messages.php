@@ -39,7 +39,7 @@ if (!$chat) {
 
 // Check session expiry (5 minutes of inactivity)
 $expiryMinutes = 5;
-$lastActivity = strtotime($chat['last_activity']);
+$lastActivity = strtotime($chat['last_activity_at']);
 $now = time();
 $isExpired = ($now - $lastActivity) > ($expiryMinutes * 60);
 
@@ -63,6 +63,6 @@ echo json_encode([
     'unread_count' => $unreadCount,
     'is_expired' => $isExpired,
     'expiry_minutes' => $expiryMinutes,
-    'last_activity' => $chat['last_activity'],
+    'last_activity' => $chat['last_activity_at'],
     'debug' => $debugInfo
 ]);
