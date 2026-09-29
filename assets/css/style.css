@@ -920,7 +920,7 @@ h1, h2, h3, h4, h5, h6 {
 
 @media (max-width: 991px) {
     .hero-section {
-        padding-top: 100px;
+        padding-top: 120px;
         padding-bottom: 60px;
     }
     
@@ -941,6 +941,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media (max-width: 767px) {
+    .hero-section {
+        padding-top: 140px;
+    }
     .hero-name {
         font-size: clamp(32px, 8vw, 48px);
     }
