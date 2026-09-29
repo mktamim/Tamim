@@ -19,13 +19,12 @@ require BASE_PATH . '/config/app.php';
 // Load core functions
 require BASE_PATH . '/includes/functions.php';
 
-// Auto-fix site_url if localhost (for production deployment)
-if (!config('app.debug')) {
-    $siteUrl = setting('site_url');
-    if (!$siteUrl || strpos($siteUrl, 'localhost') !== false || strpos($siteUrl, '127.0.0.1') !== false) {
-        $detectedUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
-        db_execute('UPDATE settings SET setting_value = ?, updated_at = NOW() WHERE setting_key = "site_url"', [$detectedUrl]);
-    }
+// Auto-fix site_url if localhost or empty (runs on every page load in production)
+$siteUrl = setting('site_url');
+if (!$siteUrl || strpos($siteUrl, 'localhost') !== false || strpos($siteUrl, '127.0.0.1') !== false || strpos($siteUrl, '/Tamim') !== false) {
+    $detectedUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
+    // Use INSERT ... ON DUPLICATE KEY UPDATE (upsert) since setting_key is UNIQUE
+    db_execute('INSERT INTO settings (setting_key, setting_value, setting_type, group_name, label, sort_order) VALUES ("site_url", ?, "text", "general", "Site URL", 0) ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value), updated_at = NOW()', [$detectedUrl]);
 }
 
 // Set timezone

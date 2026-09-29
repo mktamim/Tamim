@@ -275,6 +275,7 @@ INSERT INTO `admins` (`username`, `email`, `password`, `full_name`) VALUES
 
 -- Insert default settings
 INSERT INTO `settings` (`setting_key`, `setting_value`, `setting_type`, `group_name`, `label`, `description`, `sort_order`) VALUES
+('site_url', 'https://traveleyebangla.com', 'text', 'general', 'Site URL', 'Full website URL (auto-detected on production)', 0),
 ('site_name', 'My Portfolio', 'text', 'general', 'Site Name', 'Website name shown in title and header', 1),
 ('site_tagline', 'Professional Web Developer', 'text', 'general', 'Site Tagline', 'Short tagline for the website', 2),
 ('developer_name', 'John Doe', 'text', 'general', 'Developer Name', 'Your full name', 3),
