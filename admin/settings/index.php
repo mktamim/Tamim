@@ -49,6 +49,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_settings'])) {
             $result = upload_image($_FILES[$field], 'settings');
             if ($result['success']) {
                 db_execute('UPDATE settings SET setting_value = ?, updated_at = NOW() WHERE setting_key = ?', [$result['filename'], $field]);
+                error_log("Upload success: $field -> {$result['filename']}");
+            } else {
+                error_log("Upload failed: $field -> " . implode(', ', $result['errors']));
             }
         }
     }

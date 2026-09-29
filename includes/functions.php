@@ -398,6 +398,8 @@ function upload_image(array $file, string $subdir = ''): array
     $uploadDir = $config['path'] . '/' . $subdir;
     if (!is_dir($uploadDir)) {
         mkdir($uploadDir, 0755, true);
+        // Try to set permissions if possible
+        @chmod($uploadDir, 0755);
     }
     $filename = uniqid() . '_' . time() . '.' . $ext;
     $filepath = $uploadDir . '/' . $filename;
@@ -405,23 +407,27 @@ function upload_image(array $file, string $subdir = ''): array
         $errors[] = 'Failed to move uploaded file';
         return ['success' => false, 'errors' => $errors];
     }
-    // Convert to WebP if not already
-    if ($ext !== 'webp') {
+    // Convert to WebP if not already and GD is available
+    if ($ext !== 'webp' && extension_loaded('gd')) {
         $webpPath = $uploadDir . '/' . pathinfo($filename, PATHINFO_FILENAME) . '.webp';
+        $image = null;
         if ($mime === 'image/jpeg') {
-            $image = imagecreatefromjpeg($filepath);
+            $image = @imagecreatefromjpeg($filepath);
         } elseif ($mime === 'image/png') {
-            $image = imagecreatefrompng($filepath);
-        } else {
-            $image = null;
+            $image = @imagecreatefrompng($filepath);
         }
         if ($image) {
-            imagewebp($image, $webpPath, 85);
-            imagedestroy($image);
-            unlink($filepath);
-            $filename = pathinfo($filename, PATHINFO_FILENAME) . '.webp';
+            @imagewebp($image, $webpPath, 85);
+            @imagedestroy($image);
+            if (file_exists($webpPath)) {
+                @unlink($filepath);
+                $filename = pathinfo($filename, PATHINFO_FILENAME) . '.webp';
+            }
         }
     }
+    // If WebP conversion failed or GD not available, keep original file
+    // Ensure file has correct permissions
+    @chmod($uploadDir . '/' . $filename, 0644);
     return [
         'success' => true,
         'filename' => $filename,
