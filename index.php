@@ -594,4 +594,30 @@ require __DIR__ . '/includes/header.php';
     </div>
 </section>
 
+<script>
+// Dynamic hero padding based on navbar height (fixes mobile overlap)
+(function() {
+    const navbar = document.getElementById('mainNavbar');
+    const hero = document.querySelector('.hero-section');
+    
+    if (!navbar || !hero) return;
+    
+    function updateHeroPadding() {
+        const navbarHeight = navbar.offsetHeight;
+        hero.style.paddingTop = navbarHeight + 20 + 'px';
+    }
+    
+    // Initial
+    updateHeroPadding();
+    
+    // On resize
+    window.addEventListener('resize', updateHeroPadding);
+    
+    // On navbar collapse/expand (Bootstrap events)
+    navbar.addEventListener('show.bs.collapse', updateHeroPadding);
+    navbar.addEventListener('hidden.bs.collapse', updateHeroPadding);
+    navbar.addEventListener('shown.bs.collapse', updateHeroPadding);
+})();
+</script>
+
 <?php require __DIR__ . '/includes/footer.php'; ?>
