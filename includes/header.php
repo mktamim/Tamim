@@ -118,7 +118,7 @@ $pageType = $pageType ?? 'website';
                 </ul>
                 
                 <!-- CTA Button -->
-                <a href="/#contact" class="btn btn-primary d-none d-lg-inline-flex">
+                <a href="/#contact" class="btn btn-primary d-none d-lg-inline-flex" style="white-space: nowrap;">
                     <i class="fas fa-comment me-2"></i>Let's Talk
                 </a>
             </div>
