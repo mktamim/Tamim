@@ -1120,16 +1120,36 @@ h1, h2, h3, h4, h5, h6 {
 
 .skill-card {
     background: white;
-    border-radius: var(--radius);
-    padding: 30px;
+    border-radius: var(--radius-lg);
+    padding: 40px 30px;
     box-shadow: var(--shadow);
     transition: var(--transition);
     height: 100%;
     border: 1px solid var(--border-color);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.skill-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+}
+
+.skill-card:hover::before {
+    transform: scaleX(1);
 }
 
 .skill-card:hover {
-    transform: translateY(-8px);
+    transform: translateY(-10px);
     box-shadow: var(--shadow-xl);
 }
 
@@ -1141,9 +1161,15 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 20px;
+    margin: 0 auto 20px;
     font-size: 28px;
     color: var(--primary-color);
+    transition: var(--transition);
+}
+
+.skill-card:hover .skill-icon {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
 }
 
 .skill-card h4 {
