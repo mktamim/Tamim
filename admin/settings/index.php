@@ -53,6 +53,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_settings'])) {
         }
     }
     
+    // Auto-fix site_url if it's localhost or wrong
+    $currentSiteUrl = setting('site_url');
+    $detectedUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
+    if (!$currentSiteUrl || strpos($currentSiteUrl, 'localhost') !== false || strpos($currentSiteUrl, '127.0.0.1') !== false) {
+        db_execute('UPDATE settings SET setting_value = ?, updated_at = NOW() WHERE setting_key = "site_url"', [$detectedUrl]);
+        error_log("Auto-fixed site_url to: $detectedUrl");
+    }
+    
     redirect('/admin/settings/', 'Settings saved successfully!');
     error_log("Redirect called");
 }

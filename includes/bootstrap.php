@@ -19,6 +19,15 @@ require BASE_PATH . '/config/app.php';
 // Load core functions
 require BASE_PATH . '/includes/functions.php';
 
+// Auto-fix site_url if localhost (for production deployment)
+if (!config('app.debug')) {
+    $siteUrl = setting('site_url');
+    if (!$siteUrl || strpos($siteUrl, 'localhost') !== false || strpos($siteUrl, '127.0.0.1') !== false) {
+        $detectedUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
+        db_execute('UPDATE settings SET setting_value = ?, updated_at = NOW() WHERE setting_key = "site_url"', [$detectedUrl]);
+    }
+}
+
 // Set timezone
 date_default_timezone_set(config('app.timezone'));
 
