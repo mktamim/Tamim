@@ -24,7 +24,7 @@ $posts = db_all('SELECT bp.*, bc.name as category_name, bc.slug as category_slug
 
 $categories = blog_categories();
 
-$pagination = paginate($total, $perPage, $page, '/blog.php' . ($category ? '?category=' . $category : ''));
+$pagination = paginate($total, $perPage, $page, '/blog/' . ($category ? '?category=' . $category : ''));
 
 $pageTitle = 'Blog | ' . setting('site_name');
 $pageDescription = 'Latest articles and tutorials on web development, PHP, Laravel, and more.';
