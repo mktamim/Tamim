@@ -59,11 +59,11 @@ require __DIR__ . '/includes/header.php';
                     <div class="card-body p-0">
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item px-3 py-2 <?= empty($category) ? 'active' : '' ?>">
-                                <a href="/blog.php" class="text-decoration-none d-block">All Posts</a>
+                                <a href="/blog/" class="text-decoration-none d-block">All Posts</a>
                             </li>
                             <?php foreach ($categories as $cat): ?>
                                 <li class="list-group-item px-3 py-2 <?= $category === $cat['slug'] ? 'active' : '' ?>">
-                                    <a href="/blog.php?category=<?= e($cat['slug']) ?>" class="text-decoration-none d-block">
+                                    <a href="/blog/?category=<?= e($cat['slug']) ?>" class="text-decoration-none d-block">
                                         <?= e($cat['name']) ?>
                                     </a>
                                 </li>
@@ -101,7 +101,7 @@ require __DIR__ . '/includes/header.php';
                                     <div class="card-body d-flex flex-column">
                                         <div class="mb-2">
                                             <?php if ($post['category_name']): ?>
-                                                <a href="/blog.php?category=<?= e($post['category_slug']) ?>" class="badge bg-primary text-decoration-none"><?= e($post['category_name']) ?></a>
+                                                <a href="/blog/?category=<?= e($post['category_slug']) ?>" class="badge bg-primary text-decoration-none"><?= e($post['category_name']) ?></a>
                                             <?php endif; ?>
                                             <span class="badge bg-secondary ms-1"><?= format_date($post['published_at']) ?></span>
                                         </div>
