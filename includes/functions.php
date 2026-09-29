@@ -370,69 +370,117 @@ function upload_image(array $file, string $subdir = ''): array
 {
     $config = config('upload');
     $errors = [];
+    
+    // Log upload attempt
+    error_log("upload_image: Attempting upload for subdir=$subdir, file=" . $file['name'] . ", size=" . $file['size'] . ", error=" . $file['error']);
+    
     if ($file['error'] !== UPLOAD_ERR_OK) {
         $errors[] = 'Upload failed with error code: ' . $file['error'];
+        error_log("upload_image: Error - " . $errors[0]);
         return ['success' => false, 'errors' => $errors];
     }
+    
     $finfo = finfo_open(FILEINFO_MIME_TYPE);
     $mime = finfo_file($finfo, $file['tmp_name']);
     finfo_close($finfo);
+    error_log("upload_image: MIME type = $mime");
+    
     if (!in_array($mime, $config['allowed_types'])) {
         $errors[] = 'Invalid file type. Allowed: JPG, PNG, WebP';
+        error_log("upload_image: Invalid MIME - $mime");
         return ['success' => false, 'errors' => $errors];
     }
+    
     if ($file['size'] > $config['max_size']) {
         $errors[] = 'File size exceeds limit of 5MB';
+        error_log("upload_image: File too large - " . $file['size']);
         return ['success' => false, 'errors' => $errors];
     }
-    $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-    if (!in_array($ext, $config['allowed_extensions'])) {
+    
+    // Get extension from original filename, sanitize
+    $originalName = basename($file['name']);
+    $ext = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
+    $ext = preg_replace('/[^a-z0-9]/', '', $ext); // Sanitize extension
+    if (empty($ext) || !in_array($ext, $config['allowed_extensions'])) {
         $errors[] = 'Invalid file extension';
+        error_log("upload_image: Invalid extension - $ext");
         return ['success' => false, 'errors' => $errors];
     }
-    list($width, $height) = getimagesize($file['tmp_name']);
+    
+    list($width, $height) = @getimagesize($file['tmp_name']);
+    if (!$width || !$height) {
+        $errors[] = 'Invalid image file';
+        error_log("upload_image: getimagesize failed");
+        return ['success' => false, 'errors' => $errors];
+    }
+    
     if ($width > $config['image_max_width'] || $height > $config['image_max_height']) {
         $errors[] = "Image dimensions too large. Max: {$config['image_max_width']}x{$config['image_max_height']}";
+        error_log("upload_image: Dimensions too large - ${width}x${height}");
         return ['success' => false, 'errors' => $errors];
     }
+    
     $uploadDir = $config['path'] . '/' . $subdir;
     if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0755, true);
-        // Try to set permissions if possible
+        $created = mkdir($uploadDir, 0755, true);
+        error_log("upload_image: mkdir $uploadDir = " . ($created ? 'true' : 'false'));
         @chmod($uploadDir, 0755);
     }
-    $filename = uniqid() . '_' . time() . '.' . $ext;
+    
+    // Generate clean filename: uniqid_timestamp.ext
+    $filename = uniqid('', true) . '_' . time() . '.' . $ext;
     $filepath = $uploadDir . '/' . $filename;
+    
+    error_log("upload_image: Moving to $filepath");
+    
     if (!move_uploaded_file($file['tmp_name'], $filepath)) {
-        $errors[] = 'Failed to move uploaded file';
+        $errors[] = 'Failed to move uploaded file to ' . $filepath;
+        error_log("upload_image: move_uploaded_file FAILED");
         return ['success' => false, 'errors' => $errors];
     }
-    // Convert to WebP if not already and GD is available
+    
+    error_log("upload_image: move_uploaded_file SUCCESS");
+    
+    // Convert to WebP only if GD available and not already WebP
+    $finalFilename = $filename;
     if ($ext !== 'webp' && extension_loaded('gd')) {
-        $webpPath = $uploadDir . '/' . pathinfo($filename, PATHINFO_FILENAME) . '.webp';
+        $webpFilename = pathinfo($filename, PATHINFO_FILENAME) . '.webp';
+        $webpPath = $uploadDir . '/' . $webpFilename;
         $image = null;
+        
         if ($mime === 'image/jpeg') {
             $image = @imagecreatefromjpeg($filepath);
         } elseif ($mime === 'image/png') {
             $image = @imagecreatefrompng($filepath);
         }
+        
         if ($image) {
-            @imagewebp($image, $webpPath, 85);
+            $saved = @imagewebp($image, $webpPath, 85);
             @imagedestroy($image);
-            if (file_exists($webpPath)) {
+            
+            if ($saved && file_exists($webpPath) && filesize($webpPath) > 0) {
                 @unlink($filepath);
-                $filename = pathinfo($filename, PATHINFO_FILENAME) . '.webp';
+                $finalFilename = $webpFilename;
+                error_log("upload_image: Converted to WebP - $finalFilename");
+            } else {
+                error_log("upload_image: WebP conversion failed, keeping original");
             }
+        } else {
+            error_log("upload_image: GD imagecreate failed, keeping original");
         }
+    } else {
+        error_log("upload_image: No WebP conversion (ext=$ext, gd=" . (extension_loaded('gd') ? 'yes' : 'no') . ")");
     }
-    // If WebP conversion failed or GD not available, keep original file
-    // Ensure file has correct permissions
-    @chmod($uploadDir . '/' . $filename, 0644);
+    
+    @chmod($uploadDir . '/' . $finalFilename, 0644);
+    
+    error_log("upload_image: FINAL filename = $finalFilename");
+    
     return [
         'success' => true,
-        'filename' => $filename,
-        'path' => $config['url'] . '/' . $subdir . '/' . $filename,
-        'full_path' => $config['path'] . '/' . $subdir . '/' . $filename,
+        'filename' => $finalFilename,
+        'path' => $config['url'] . '/' . $subdir . '/' . $finalFilename,
+        'full_path' => $config['path'] . '/' . $subdir . '/' . $finalFilename,
     ];
 }
 
